@@ -1,10 +1,17 @@
 import wollok.game.*
-import pepita.*
+import tablero.*
 import texto.*
+import nivel.*
 
 program juego {
+	game.cellSize(400)
+	game.height(11)
+	game.width(11)
+	game.boardGround("tablero.png")
 	game.title("Juego Base")
-	game.addVisual(pepita)
-	game.addVisual(texto)
+	
+	configuracion.configuracionInicial()
+	configuracion.configurarTeclas()
+	
 	game.start()
 }
