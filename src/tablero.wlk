@@ -2,8 +2,9 @@ import wollok.game.*
 import direcciones.*
 
 object soldadoNazi {
-	var posicion = game.at(0, 0)
-	method position() = posicion
+	var posicion = new Coordenadas(x = 3, y = 3)
+	
+	method position() = game.at(posicion.x() + 1, posicion.y())
 	method image() = "soldadoNazi.png"
 
 	method ocupaEspacio() = true
@@ -16,6 +17,11 @@ object soldadoNazi {
 		game.removeVisual(self)
 		efectos.explosion(posicion)
 	}
+}
+
+class Coordenadas{
+	var property x = 0
+	var property y = 0
 }
 
 object cursor{
@@ -36,21 +42,21 @@ object cursor{
 		if (seleccionado == null) { seleccionado = game.uniqueCollider(self) } // uniqueCollider: Returns the unique object that is in same position of given object.
 		else seleccionado = null
 	}
-	
 }
 
 object soldadoNoNazi {
-	var posicionTableroX = 2
-	var posicionTableroY = 2
+	var posicion = new Coordenadas(x = 2, y = 2)
+	
 	const rangoMaximoMovimiento = 2
-	method position() = game.at(posicionTableroX + 1, posicionTableroY)
+	method position() = game.at(posicion.x() + 1, posicion.y())
 	method image() = "soldadoNazi.png"
+	method posicion() = posicion
 
 	method ocupaEspacio() = true
-	method casilleroActual() = tablero.casillero(posicionTableroX, posicionTableroY)
+	method casilleroActual() = tablero.casillero(posicion.x(), posicion.y())
 	
-	method distanciaX(otroCasillero) = (posicionTableroX - otroCasillero.x()).abs()
-	method distanciaY(otroCasillero) = (posicionTableroY - otroCasillero.y()).abs()
+	method distanciaX(otroCasillero) = (self.posicion().x() - otroCasillero.posicion().x()).abs()
+	method distanciaY(otroCasillero) = (self.posicion().y() - otroCasillero.posicion().y()).abs()
 	method distanciaXMenorA(casillero, distancia) = self.distanciaX(casillero) < distancia
 	method distanciaYMenorA(casillero, distancia) = self.distanciaY(casillero) < distancia
 	method distanciaMenorA(casillero, distancia) = self.distanciaXMenorA(casillero, distancia) && self.distanciaYMenorA(casillero, distancia)
@@ -66,9 +72,9 @@ object tablero{
 	const casillas = []
 	method casillas() = casillas
 	
-	method casillero(x, y) = casillas.find({casillero => casillero.x() == x && casillero.y() == y})
+	method casillero(x, y) = casillas.find({casillero => casillero.posicion().x() == x && casillero.posicion().y() == y})
 	
-	method crearFila(n) { tamanioVertical.times({i => casillas.add(new Casillero(x = i, y = n))}) }
+	method crearFila(n) { tamanioVertical.times({i => casillas.add(new Casillero(posicion = new Coordenadas(x = i, y = n)))}) }
 	method crearCasillas() { tamanioHorizontal.times({i => self.crearFila(i)}) }
 	
 	method configurarCasillas() { 
@@ -78,17 +84,19 @@ object tablero{
 
 // TODO: clase "ubicable" o algo así que tenga coordenadas, distancia, y esas cosas (para que el resto herede y no haya repeticion de lógica)
 class Casillero{
-	const x
-	const y
+	const posicion = new Coordenadas()
 	var habilitado = true
 	
-	method x() = x
-	method y() = y
+	method posicion() = posicion
+	
+	method position() = game.at(posicion.x() + 1, posicion.y())
+	method image() = "soldadoNazi.png"
+	
 	method habilitado() = habilitado
 	method deshabilitar() {habilitado = false}
 	method habilitar() {habilitado = true}
-	method distanciaX(otroCasillero) = (x - otroCasillero.x()).abs()
-	method distanciaY(otroCasillero) = (y - otroCasillero.y()).abs()
+	method distanciaX(otroCasillero) = (posicion.x() - otroCasillero.posicion().x()).abs()
+	method distanciaY(otroCasillero) = (posicion.y() - otroCasillero.posicion().y()).abs()
 }
 
 object efectos{
