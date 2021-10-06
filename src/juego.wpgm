@@ -7,11 +7,13 @@ program juego {
 	game.cellSize(400)
 	game.height(11)
 	game.width(11)
-	game.boardGround("tablero.png")
 	game.title("Juego Base")
+	game.boardGround("tablero.png")
 	
-	configuracion.configuracionInicial()
+	
 	configuracion.configurarTeclas()
+	menuPrincipal.iniciar()	
 	
 	game.start()
 }
+
