@@ -1,29 +1,6 @@
 import wollok.game.*
 import direcciones.*
 
-object soldadoNazi {
-	var posicion = new Coordenadas(x = 3, y = 3)
-	
-	method position() = game.at(posicion.x() + 1, posicion.y())
-	method image() = "soldadoNazi.png"
-
-	method ocupaEspacio() = true
-
-	method mover(direccion) {
-		posicion = direccion.proximaPosicion(posicion) 
-	}
-	
-	method morir(){
-		game.removeVisual(self)
-		efectos.explosion(posicion)
-	}
-}
-
-class Coordenadas{
-	var property x = 0
-	var property y = 0
-}
-
 object cursor{
 	var posicion = game.at(0,0)
 	var seleccionado = null
@@ -36,7 +13,7 @@ object cursor{
 		if (seleccionado != null) seleccionado.mover(direccion)
 	}
 	
-	method ubicacionOcupada(){ game.colliders(self).any({visual => visual.esUnidad()}) }
+	method ubicacionOcupada(){ game.colliders(self).any({visual => visual.ocupaEspacio()}) }
 
 	method seleccionar(){
 		if (seleccionado == null) { seleccionado = game.uniqueCollider(self) } // uniqueCollider: Returns the unique object that is in same position of given object.
@@ -44,25 +21,28 @@ object cursor{
 	}
 }
 
-object soldadoNoNazi {
-	var posicion = new Coordenadas(x = 2, y = 2)
-	
+class Personaje {
 	const rangoMaximoMovimiento = 2
-	method position() = game.at(posicion.x() + 1, posicion.y())
-	method image() = "soldadoNazi.png"
-	method posicion() = posicion
+	var position = game.at(0,0)
+	var image = "soldadoNazi.png"
+	
+	method mover(direccion){
+		position = direccion.proximaPosicion(position)
+	}
+	
+	method position() = position
+	method image() = image
 
 	method ocupaEspacio() = true
-	method casilleroActual() = tablero.casillero(posicion.x(), posicion.y())
 	
-	method distanciaX(otroCasillero) = (self.posicion().x() - otroCasillero.posicion().x()).abs()
-	method distanciaY(otroCasillero) = (self.posicion().y() - otroCasillero.posicion().y()).abs()
-	method distanciaXMenorA(casillero, distancia) = self.distanciaX(casillero) < distancia
-	method distanciaYMenorA(casillero, distancia) = self.distanciaY(casillero) < distancia
-	method distanciaMenorA(casillero, distancia) = self.distanciaXMenorA(casillero, distancia) && self.distanciaYMenorA(casillero, distancia)
+	method rangoMovimiento() = tablero.casillas().filter({ casilla => self.distanciaMenorA(casilla, rangoMaximoMovimiento + 1) })
 	
-
-//	method rangoMovimiento() = tablero.casillas().filter({ casilla => self.distanciaMenorA(casilla, rangoMaximoMovimiento + 1) })
+	method distanciaMenorA(casillero, distancia) = distancia < self.position().distance(casillero)
+	
+	method morir(){
+		game.removeVisual(self)
+		efectos.explosion(tablero.casilleroDe(self))
+	}
 }
 
 object tablero{
@@ -72,9 +52,11 @@ object tablero{
 	const casillas = []
 	method casillas() = casillas
 	
-	method casillero(x, y) = casillas.find({casillero => casillero.posicion().x() == x && casillero.posicion().y() == y})
+	method casilleroDe(personaje) = casillas.find({ casillero => casillero.ocupante(personaje) })
+		
+	method casillero(x, y) = casillas.find({casillero => casillero.coordenadas().x() == x && casillero.coordenadas().y() == y})
 	
-	method crearFila(n) { tamanioVertical.times({i => casillas.add(new Casillero(posicion = new Coordenadas(x = i, y = n)))}) }
+	method crearFila(n) { tamanioVertical.times({i => casillas.add(new Casillero(coordenadas = new Coordenadas(x = i, y = n)))}) }
 	method crearCasillas() { tamanioHorizontal.times({i => self.crearFila(i)}) }
 	
 	method configurarCasillas() { 
@@ -82,21 +64,26 @@ object tablero{
 	}
 }
 
-// TODO: clase "ubicable" o algo así que tenga coordenadas, distancia, y esas cosas (para que el resto herede y no haya repeticion de lógica)
 class Casillero{
-	const posicion = new Coordenadas()
+	const coordenadas = new Coordenadas()
 	var habilitado = true
 	
-	method posicion() = posicion
+	method coordenadas() = coordenadas
 	
-	method position() = game.at(posicion.x() + 1, posicion.y())
-	method image() = "soldadoNazi.png"
+	method position() = game.at(coordenadas.x() + 1, coordenadas.y())
+	
+	method ocupantes() = game.colliders(self)
+	
+	method ocupante(personaje) = self.ocupantes().contains(personaje)
 	
 	method habilitado() = habilitado
 	method deshabilitar() {habilitado = false}
 	method habilitar() {habilitado = true}
-	method distanciaX(otroCasillero) = (posicion.x() - otroCasillero.posicion().x()).abs()
-	method distanciaY(otroCasillero) = (posicion.y() - otroCasillero.posicion().y()).abs()
+}
+
+class Coordenadas{
+	var property x = 0
+	var property y = 0
 }
 
 object efectos{

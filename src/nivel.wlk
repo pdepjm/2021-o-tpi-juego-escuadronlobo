@@ -6,7 +6,7 @@ import direcciones.*
 object configuracion{
 	method configuracionInicial(){
 		game.removeVisual(menuPrincipal)
-		game.addVisual(soldadoNazi)
+		game.addVisual(new Personaje(image = "soldadoNazi.png"))
 		game.addVisual(texto)
 		game.addVisual(cursor)		
 	}
@@ -20,18 +20,17 @@ object configuracion{
 	}
 }
 	
-	object menuPrincipal {
+object menuPrincipal {
 		var property position = game.at(-2,0)
 		var property image = "menuPrincipal.png"
-		var property menuHabilitado = true
-		
+		var property menuHabilitado = true	
 		
   		method iniciar(){
   			if(menuHabilitado){
   				menuHabilitado = false
   				game.addVisual(self)
   				keyboard.enter().onPressDo({ configuracion.configuracionInicial() })
-  			}
+  				}
 		}
 }
 	
