@@ -3,18 +3,6 @@ import tablero.*
 import texto.*
 import nivel.*
 
-object configuracionBoard {
-	const property anchoBoard = 11
-	const property altoBoard = 11
-	const property tamanioCeldaBoard = 400
-	
-	method configurarBoard() {
-		game.cellSize(tamanioCeldaBoard)
-		game.height(altoBoard)
-		game.width(anchoBoard)
-	}
-}
-
 program juego {
 	configuracionBoard.configurarBoard()
 	game.title("Juego Base")
@@ -26,3 +14,4 @@ program juego {
 	
 	game.start()
 }
+

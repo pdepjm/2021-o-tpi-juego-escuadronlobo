@@ -91,3 +91,17 @@ object efectos{
 		// animacion explosion
 	}
 }
+
+object configuracionBoard {
+	const property anchoBoard = 11
+	const property altoBoard = 11
+	const property tamanioCeldaBoard = 400
+	
+	method configurarBoard() {
+		game.cellSize(tamanioCeldaBoard)
+		game.height(altoBoard)
+		game.width(anchoBoard)
+	}
+	
+	method estaEnElBoard(ubicacion) = (ubicacion.x().between(0, anchoBoard)) && (ubicacion.y().between(0, altoBoard))
+}

@@ -1,11 +1,26 @@
 import soundProducer.*
+import wollok.game.*
+import tablero.*
+import direcciones.*
 
-describe "Inserte descripción" {
-	method initialize() {
-		soundProducer.provider(soundProviderMock)		
+describe "configuracionBoard" {
+	test "ubicacion esta en el board" {
+		assert.that(configuracionBoard.estaEnElBoard(game.at(configuracionBoard.anchoBoard(), configuracionBoard.altoBoard())))
 	}
-	
-	test "testX" {
-		assert.that(true)
-	}	
+	test "ubicacion no esta en el board" {
+		assert.notThat(configuracionBoard.estaEnElBoard(game.at(configuracionBoard.anchoBoard(), configuracionBoard.altoBoard() + 1)))
+	}
+}
+
+// testea solo izquierda
+describe "objetos direcciones"{
+	var posicion = game.at(1,2)
+	var posicionSiguiente = game.at(0,2)
+	var posicionAlBorde = game.at(11,3)
+	test "devuelve direccion siguiente si no se pasa del board"{
+		assert.equals(izquierda.proximaPosicion(posicion), posicionSiguiente)
+	}
+	test "devuelve direccion actual si se pasa del board"{
+		assert.equals(derecha.proximaPosicion(posicionAlBorde), posicionAlBorde)
+	}
 }
