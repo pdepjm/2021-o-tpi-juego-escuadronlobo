@@ -6,7 +6,7 @@ import nivel.*
 program juego {
 	configuracionBoard.configurarBoard()
 	game.title("Juego Base")
-	//game.boardGround("tablero.png")
+	game.boardGround("tablero.png")
 	
 	
 	configuracion.configurarTeclas()
