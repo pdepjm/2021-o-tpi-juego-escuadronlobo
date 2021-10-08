@@ -2,14 +2,14 @@ import wollok.game.*
 import direcciones.*
 
 object cursor{
-	var posicion = game.at(0,0)
+	var position = game.at(0,0)
 	var seleccionado = null
 	const ubicacionesOcupadas = #{}
 
-	method position() = posicion
+	method position() = position
 	method image() = "cursor.png"
 	method mover(direccion) {
-		posicion = direccion.proximaPosicion(posicion)
+		position = direccion.proximaPosicion(position)
 		if (seleccionado != null) seleccionado.mover(direccion)
 	}
 	
@@ -23,7 +23,7 @@ object cursor{
 
 class Personaje {
 	const rangoMaximoMovimiento = 2
-	var position = game.at(0,0)
+	var position = game.at(1,1)
 	var image = "soldadoNazi.png"
 	
 	method mover(direccion){
@@ -93,9 +93,9 @@ object efectos{
 }
 
 object configuracionBoard {
-	const property anchoBoard = 11
+	const property anchoBoard = 17
 	const property altoBoard = 11
-	const property tamanioCeldaBoard = 400
+	const property tamanioCeldaBoard = 70
 	
 	method configurarBoard() {
 		game.cellSize(tamanioCeldaBoard)
@@ -103,5 +103,5 @@ object configuracionBoard {
 		game.width(anchoBoard)
 	}
 	
-	method estaEnElBoard(ubicacion) = (ubicacion.x().between(0, anchoBoard)) && (ubicacion.y().between(0, altoBoard))
+	method estaEnElBoard(ubicacion) = (ubicacion.x().between(0, anchoBoard-2)) && (ubicacion.y().between(0, altoBoard-2))
 }
