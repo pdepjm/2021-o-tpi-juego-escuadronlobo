@@ -4,10 +4,11 @@ import texto.*
 import direcciones.*
 import visuales.*
 import teclado.*
+import personajes.*
 
 object configuracion{
 	method configuracionInicial(){
-		game.addVisual(new Personaje(image = "soldadoNazi.png"))
+		game.addVisual(new Personaje(rangoMaximoMovimiento = 2, image = "soldadoNazi.png", vida = 100))
 		game.addVisual(cursor)		
 	}
 }

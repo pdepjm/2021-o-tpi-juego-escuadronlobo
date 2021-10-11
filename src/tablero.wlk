@@ -21,30 +21,6 @@ object cursor{
 	}
 }
 
-class Personaje {
-	const rangoMaximoMovimiento = 2
-	var position = game.at(0,8)
-	var image = "soldadoNazi.png"
-	
-	method mover(direccion){
-		position = direccion.proximaPosicion(position)
-	}
-	
-	method position() = position
-	method image() = image
-
-	method ocupaEspacio() = true
-	
-	method rangoMovimiento() = tablero.casillas().filter({ casilla => self.distanciaMenorA(casilla, rangoMaximoMovimiento + 1) })
-	
-	method distanciaMenorA(casillero, distancia) = distancia < self.position().distance(casillero)
-	
-	method morir(){
-		game.removeVisual(self)
-		efectos.explosion(tablero.casilleroDe(self))
-	}
-}
-
 object tablero{
 	const tamanioVertical = 8
 	const tamanioHorizontal = 8
