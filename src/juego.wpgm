@@ -2,6 +2,7 @@ import wollok.game.*
 import tablero.*
 import texto.*
 import nivel.*
+import teclado.*
 
 program juego {
 	configuracionBoard.configurarBoard()
@@ -9,7 +10,8 @@ program juego {
 	game.boardGround("tablero.png")
 	
 	
-	configuracion.configurarTeclas()
+	teclado.teclasCursor()
+	menuPrincipal.mostrar()
 	menuPrincipal.iniciar()	
 	
 	game.start()

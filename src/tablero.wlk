@@ -4,26 +4,26 @@ import direcciones.*
 object cursor{
 	var position = game.at(0,0)
 	var seleccionado = null
-	const ubicacionesOcupadas = #{}
+	//const ubicacionesOcupadas = #{}
 
 	method position() = position
 	method image() = "cursor.png"
 	method mover(direccion) {
 		position = direccion.proximaPosicion(position)
-		if (seleccionado != null) seleccionado.mover(direccion)
+		if (seleccionado != null) seleccionado.mover(direccion) 
 	}
 	
 	method ubicacionOcupada(){ game.colliders(self).any({visual => visual.ocupaEspacio()}) }
 
 	method seleccionar(){
 		if (seleccionado == null) { seleccionado = game.uniqueCollider(self) } // uniqueCollider: Returns the unique object that is in same position of given object.
-		else seleccionado = null
+		else seleccionado = null 
 	}
 }
 
 class Personaje {
 	const rangoMaximoMovimiento = 2
-	var position = game.at(1,1)
+	var position = game.at(0,8)
 	var image = "soldadoNazi.png"
 	
 	method mover(direccion){
@@ -103,5 +103,5 @@ object configuracionBoard {
 		game.width(anchoBoard)
 	}
 	
-	method estaEnElBoard(ubicacion) = (ubicacion.x().between(0, anchoBoard-2)) && (ubicacion.y().between(0, altoBoard-2))
+	method estaEnElBoard(ubicacion) = (ubicacion.x().between(0, anchoBoard-1)) && (ubicacion.y().between(0, altoBoard-2))
 }
