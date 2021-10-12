@@ -14,7 +14,7 @@ class Ataque{
 	
 	method marcarComoSeleccionado(nuevoAtacante){
 		atacante = nuevoAtacante
-//		tablero.pintarDeVerde(self.casillerosAtacables)
+		tablero.pintarCasillerosAtaque(self.casillerosAtacables)
 	}
 	
 	method agregarObjetivo(posicion){
