@@ -19,7 +19,7 @@ class Personaje {
 
 	method ocupaEspacio() = true
 	
-	method rangoMovimiento() = tablero.casillas().filter({ casilla => self.distanciaMenorA(casilla, rangoMaximoMovimiento + 1) })
+	method rangoMovimiento() = tablero.casillas().filter({ casilla => self.distanciaMenorA(casilla.position(), rangoMaximoMovimiento + 1) })
 	
 	method distanciaMenorA(casillero, distancia) = distancia < self.position().distance(casillero)
 	
