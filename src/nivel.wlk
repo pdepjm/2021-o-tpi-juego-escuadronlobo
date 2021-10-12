@@ -9,12 +9,8 @@ import ataques.*
 
 object configuracion{
 	method configuracionInicial(){
-		const soldadoNaziJp1 = new Personaje(rangoMaximoMovimiento = 2, image = "soldadoNazi.png", vida = 100, ataques = [new ProyectilEnArco()])
-    	const soldadoNaziJp2 = new Personaje(rangoMaximoMovimiento = 2, image = "soldadoNazi.png", position = game.at(16,8), vida = 100, ataques = [new ProyectilEnArco()])
-    	game.addVisual(soldadoNaziJp1)
-    	game.addVisual(soldadoNaziJp2)
-    	game.addVisual(cursor)
-		tablero.configurarCasillas()
+		game.addVisual(new Personaje(rangoMaximoMovimiento = 2, image = "soldadoNazi.png", vida = 100, ataques = [new ProyectilEnArco()]))
+		game.addVisual(cursor)		
 	}
 }
 	

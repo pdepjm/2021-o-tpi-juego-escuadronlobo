@@ -40,10 +40,6 @@ describe "manejo de ataques con cursor"{
 		cursor.seleccionarAtaque(1)
 	}
 
-	test "casillerosAtacables"{
-		
-	}
-
 	test "seleccionarAtaque"{
 		assert.equals(cursor.ataqueSeleccionado(), ataque1)
 	}

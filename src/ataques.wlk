@@ -62,7 +62,8 @@ class ProyectilEnArco inherits Ataque {
 	}
 	
 	// TODO: repeticion de logica en estos dos (tamb estan en Personaje)
-	override method casillerosAtacables() = tablero.casillas().filter({ casilla => atacante.distanciaMenorA(casilla.position(), rangoMaximo + 1) })
+	override method casillerosAtacables() = tablero.casillas().filter({ casilla => self.distanciaMenorA(casilla.position(), rangoMaximo + 1) })
+	method distanciaMenorA(posicion, distancia) = distancia < atacante.position().distance(posicion)
 }
 
 class DisparoLineaRecta {
@@ -118,4 +119,7 @@ class GranadaCuracion inherits Granada {
  * El método atacar va a hacerle cosas al personaje (gastar municion o lo que sea, depende
  * del personaje) y además va a lanzar ese ataque desde la posición del personaje, mandando
  * al ataque elejido el mensaje lanzarAtaque(posición). El resto es responsabilidad del ataque.
+ * 
+ * 
+ * 
  */
