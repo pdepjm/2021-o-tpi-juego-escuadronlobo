@@ -2,6 +2,8 @@ import soundProducer.*
 import wollok.game.*
 import tablero.*
 import direcciones.*
+import personajes.*
+import ataques.*
 
 describe "configuracionBoard" {
 	test "ubicacion esta en el board" {
@@ -23,4 +25,29 @@ describe "objetos direcciones"{
 	test "devuelve direccion actual si se pasa del board"{
 		assert.equals(derecha.proximaPosicion(posicionAlBorde), posicionAlBorde)
 	}
+}
+
+describe "manejo de ataques con cursor"{
+	const ataque1 = new ProyectilEnArco()
+	const atacante = new Personaje(position = game.at(5,5), ataques = [ataque1], image = "soldadoNazi.png", vida = 100, rangoMaximoMovimiento = 4)
+	const atacado = new Personaje(position = game.at(4,4), ataques = [ataque1], image = "soldadoNazi.png", vida = 100, rangoMaximoMovimiento = 4)
+
+	method initialize() {
+		game.addVisual(atacante)
+		game.addVisual(cursor)
+		5.times({i => cursor.mover(arriba)})
+		5.times({i => cursor.mover(derecha)})
+		cursor.seleccionarAtaque(1)
+	}
+
+	test "seleccionarAtaque"{
+		assert.equals(cursor.ataqueSeleccionado(), ataque1)
+	}
+	
+	test "seleccionarObjetivoAtaque con objetivo atacable"{
+		cursor.mover(abajo)
+		cursor.seleccionarObjetivoAtaque()
+		assert.that(ataque1.objetivos().contains(cursor.position()))
+	}
+
 }

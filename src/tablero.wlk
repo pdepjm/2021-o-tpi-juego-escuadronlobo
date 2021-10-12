@@ -1,13 +1,15 @@
 import wollok.game.*
 import direcciones.*
+import ataques.*
 
 object cursor{
 	var position = game.at(0,0)
 	var seleccionado = null
+	var ataqueSeleccionado = ningunAtaque
 	//const ubicacionesOcupadas = #{}
 
 	method position() = position
-	method image() = "cursor.png"
+	method image() = ataqueSeleccionado.mira()
 	method mover(direccion) {
 		position = direccion.proximaPosicion(position)
 		if (seleccionado != null) seleccionado.mover(direccion) 
@@ -16,9 +18,28 @@ object cursor{
 	method ubicacionOcupada(){ game.colliders(self).any({visual => visual.ocupaEspacio()}) }
 
 	method seleccionar(){
-		if (seleccionado == null) { seleccionado = game.uniqueCollider(self) } // uniqueCollider: Returns the unique object that is in same position of given object.
-		else seleccionado = null 
+		if (seleccionado == null) { seleccionado = self.personajeApuntado() } // uniqueCollider: Returns the unique object that is in same position of given object.
+		else seleccionado = null
 	}
+	
+	method personajeApuntado() = game.uniqueCollider(self)
+	
+	method seleccionarAtaque(n){
+		ataqueSeleccionado = self.personajeApuntado().ataque(n)
+		ataqueSeleccionado.marcarComoSeleccionado(self.personajeApuntado())
+	}
+	
+	method seleccionarObjetivoAtaque(){
+		ataqueSeleccionado.agregarObjetivo(self.position())
+	}
+	
+	method borrarAtaqueSeleccionado() { 
+		ataqueSeleccionado = ningunAtaque
+	}
+	
+	// para los tests
+	method ataqueSeleccionado() = ataqueSeleccionado
+	method ataqueSeleccionado(nuevo) {ataqueSeleccionado = nuevo}
 }
 
 object tablero{

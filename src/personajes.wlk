@@ -1,5 +1,6 @@
 import wollok.game.*
 import tablero.*
+import ataques.*
 
 class Personaje {
 	const rangoMaximoMovimiento // De Prueba: rangoMaximoMomiento = 2
