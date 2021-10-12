@@ -59,7 +59,17 @@ object tablero{
 	method configurarCasillas() { 
 		self.crearCasillas()
 	}
+	
+	method pintarCasillerosAtaque(casillerosAtacables) {
+		casillerosAtacables.forEach({casillero => casillero.pintar()})
+	}
 }
+
+object recuadroVerde {
+	var property image = "recuadroVerde.png"
+	var property position 
+	method mostrar() = game.addVisual(self)  
+} 
 
 class Casillero{
 	const coordenadas = new Coordenadas()
@@ -76,6 +86,11 @@ class Casillero{
 	method habilitado() = habilitado
 	method deshabilitar() {habilitado = false}
 	method habilitar() {habilitado = true}
+	
+	method pintar(){
+		recuadroVerde.position(self.position())
+		return recuadroVerde.mostrar()
+	}
 }
 
 class Coordenadas{
