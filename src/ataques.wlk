@@ -1,69 +1,76 @@
 import wollok.game.*
 import tablero.*
 
+object testear{
+	method inicializar(){
+		
+	}
+}
+
 class Ataque{
 	var atacante = null
-	var objetivos = [] // son POSICIONES
 	
 	method mira() = "mira.png"
 	
+	
 	// para redefinir en cada clase heredera
 	method casillerosAtacables() = tablero.casillas() // son objetos CASILLA
-	method realizarEfectoAtaque() {}
+	method realizarEfectoAtaque(_) {}
 	method objetivosMaximos() = 1
 	
 	method marcarComoSeleccionado(nuevoAtacante){
 		atacante = nuevoAtacante
-		tablero.pintarCasillerosAtaque(self.casillerosAtacables)
+//		tablero.pintarCasilleros(self.casillerosAtacables())
 	}
 	
-	method agregarObjetivo(posicion){
-		if (objetivos.size() < self.objetivosMaximos()) {self.agregarSiEsAtacable(posicion)
-		game.say(cursor, "agrego objetivo")}
-		else {self.realizarAtaque() 
-			game.say(cursor, "no agrego una mierda")}
-	}
-	
-	method realizarAtaque(){
-		self.realizarEfectoAtaque()
-		self.borrarAtacanteSeleccionado()
-		cursor.borrarAtaqueSeleccionado()
-		objetivos = []
+	method realizarAtaque(posicion){
+		if (self.esAtacable(posicion)){
+			self.realizarEfectoAtaque(posicion)
+			self.borrarAtacanteSeleccionado()
+			cursor.borrarAtaqueSeleccionado()
+			tablero.despintarCasillerosAtaque()
+			}
+		else (game.say(cursor, "no se puede atacar esta ubicación"))
 	}
 	
 	method borrarAtacanteSeleccionado(){
 		atacante = null
 	}
 	
-	method agregarSiEsAtacable(posicion) {
-		if (self.esAtacable(posicion)) objetivos.add(posicion) 
-	}
-	
 	method esAtacable(posicion) = self.casillerosAtacables().map({casillero => casillero.position()}).contains(posicion)
 	
 	// para testear
-	method objetivos() = objetivos
 	method atacante() = atacante
 	method atacante(nuevo) {atacante = nuevo}
 }
 
 object ningunAtaque{
 	method marcarComoSeleccionado(_) {}
-	method agregarObjetivo(_) {}
+	method realizarAtaque(_) {}
 	method mira() = "cursor.png" 
 }
 
 class ProyectilEnArco inherits Ataque {
 	var rangoMaximo = 3
-	var danio = 3
+	var danio = 30
 	
-	override method realizarEfectoAtaque(){
-		game.uniqueCollider(objetivos.first()).recibirDanio(danio)
+	override method realizarEfectoAtaque(posicion){
+		game.say(atacante, "pium pium")
+		game.uniqueCollider(cursor).recibirDanio(danio)
+	}
+	
+	override method mira() {
+		if (self.esAtacable(cursor.position())) return "mira.png"
+		else return "cursor.png"
 	}
 	
 	// TODO: repeticion de logica en estos dos (tamb estan en Personaje)
 	override method casillerosAtacables() = tablero.casillas().filter({ casilla => self.distanciaMenorA(casilla.position(), rangoMaximo + 1) })
-	method distanciaMenorA(posicion, distancia) = distancia < atacante.position().distance(posicion)
+	method distanciaX(otroCasillero) = (atacante.position().x() - otroCasillero.x()).abs()
+	method distanciaY(otroCasillero) = (atacante.position().y() - otroCasillero.y()).abs()
+	method distanciaXMenorA(casillero, distancia) = self.distanciaX(casillero) < distancia
+	method distanciaYMenorA(casillero, distancia) = self.distanciaY(casillero) < distancia
+	method distanciaMenorA(casillero, distancia) = self.distanciaXMenorA(casillero, distancia) && self.distanciaYMenorA(casillero, distancia)
 }
 
 class DisparoLineaRecta {

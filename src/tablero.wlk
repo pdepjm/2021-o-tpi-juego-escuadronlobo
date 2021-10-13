@@ -22,15 +22,16 @@ object cursor{
 		else seleccionado = null
 	}
 	
-	method personajeApuntado() = game.uniqueCollider(self)
+	method personajeApuntado(){ return game.uniqueCollider(self)}
 	
 	method seleccionarAtaque(n){
 		ataqueSeleccionado = self.personajeApuntado().ataque(n)
 		ataqueSeleccionado.marcarComoSeleccionado(self.personajeApuntado())
 	}
 	
-	method seleccionarObjetivoAtaque(){
-		ataqueSeleccionado.agregarObjetivo(self.position())
+	method atacar(){
+		ataqueSeleccionado.realizarAtaque(self.position())
+		self.borrarAtaqueSeleccionado()
 	}
 	
 	method borrarAtaqueSeleccionado() { 
@@ -45,6 +46,7 @@ object cursor{
 object tablero{
 	const tamanioVertical = 8
 	const tamanioHorizontal = 8
+	var casillasPintadas = []
 	
 	const casillas = []
 	method casillas() = casillas
@@ -60,24 +62,30 @@ object tablero{
 		self.crearCasillas()
 	}
 	
-	method pintarCasillerosAtaque(casillerosAtacables) {
-		casillerosAtacables.forEach({casillero => casillero.pintar()})
+	method pintarCasilleros(casilleros) {
+		casillasPintadas = casilleros
+		casilleros.forEach({casillero => casillero.pintar()})
+	}
+	
+	method despintarCasillerosAtaque() {
+		casillasPintadas.forEach({casilla => casilla.despintar()})
 	}
 }
 
-object recuadroVerde {
-	var property image = "recuadroVerde.png"
-	var property position 
+class CirculoVerde {
+	var property image = "CirculoVerde.png"
+	var property position
 	method mostrar() = game.addVisual(self)  
 } 
 
 class Casillero{
 	const coordenadas = new Coordenadas()
 	var habilitado = true
+	var circuloVerde = null
 	
 	method coordenadas() = coordenadas
 	
-	method position() = game.at(coordenadas.x() + 1, coordenadas.y())
+	method position() = game.at(coordenadas.x() + 4, coordenadas.y() + 1)
 	
 	method ocupantes() = game.colliders(self)
 	
@@ -88,8 +96,12 @@ class Casillero{
 	method habilitar() {habilitado = true}
 	
 	method pintar(){
-		recuadroVerde.position(self.position())
-		return recuadroVerde.mostrar()
+		circuloVerde = new CirculoVerde(position = self.position())
+		circuloVerde.mostrar()
+	}
+	
+	method despintar(){
+		game.removeVisual(circuloVerde)
 	}
 }
 

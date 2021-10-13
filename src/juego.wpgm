@@ -6,10 +6,11 @@ import teclado.*
 
 program juego {
 	configuracionBoard.configurarBoard()
-	game.title("Juego Base")
+	
+	game.title("TABLE WAR")
 	game.boardGround("tablero.png")
 	
-	
+	teclado.teclasAtaques()
 	teclado.teclasCursor()
 	menuPrincipal.mostrar()
 	menuPrincipal.iniciar()	

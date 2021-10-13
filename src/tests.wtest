@@ -30,24 +30,30 @@ describe "objetos direcciones"{
 describe "manejo de ataques con cursor"{
 	const ataque1 = new ProyectilEnArco()
 	const atacante = new Personaje(position = game.at(5,5), ataques = [ataque1], image = "soldadoNazi.png", vida = 100, rangoMaximoMovimiento = 4)
-	const atacado = new Personaje(position = game.at(4,4), ataques = [ataque1], image = "soldadoNazi.png", vida = 100, rangoMaximoMovimiento = 4)
-
-	method initialize() {
+	
+	test "seleccionarObjetivoAtaque con objetivo atacable"{
 		game.addVisual(atacante)
 		game.addVisual(cursor)
 		5.times({i => cursor.mover(arriba)})
 		5.times({i => cursor.mover(derecha)})
 		cursor.seleccionarAtaque(1)
-	}
-
-	test "seleccionarAtaque"{
-		assert.equals(cursor.ataqueSeleccionado(), ataque1)
-	}
-	
-	test "seleccionarObjetivoAtaque con objetivo atacable"{
 		cursor.mover(abajo)
 		cursor.seleccionarObjetivoAtaque()
 		assert.that(ataque1.objetivos().contains(cursor.position()))
 	}
+}
 
+describe "seleccionarAtaque"{
+	const ataque1 = new ProyectilEnArco()
+	const atacante = new Personaje(position = game.at(5,5), ataques = [ataque1], image = "soldadoNazi.png", vida = 100, rangoMaximoMovimiento = 4)
+	
+	test "seleccionarAtaque"{
+		tablero.configurarCasillas()
+		game.addVisual(atacante)
+		game.addVisual(cursor)
+		5.times({i => cursor.mover(arriba)})
+		5.times({i => cursor.mover(derecha)})
+		cursor.seleccionarAtaque(1)
+		assert.equals(cursor.ataqueSeleccionado(), ataque1)
+	}
 }
