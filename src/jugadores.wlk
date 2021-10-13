@@ -1,3 +1,5 @@
+import wollok.game.*
+
 class Jugador {
 	var personajes = []
 	
@@ -15,11 +17,21 @@ class Jugador {
 	method matarPersonaje(personaje) = personajes.remove(personaje)
 	
 	method perdio() = personajes == []
+	
+	method ganar(){
+		game.addVisual(self)
+	}
+
 }
 
 object jugador1 inherits Jugador {
-	
+	var property position = game.at(0,0)
+	var property image = "pantallaGanadoraJ1.png"
+
 }
+
 object jugador2 inherits Jugador {
+	var property position = game.at(0,0)
+	var property image = "pantallaGanadoraJ2.png"
 	
 }

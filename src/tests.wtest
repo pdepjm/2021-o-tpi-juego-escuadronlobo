@@ -26,3 +26,10 @@ describe "objetos direcciones"{
 		assert.equals(arriba.proximaPosicion(posicionAlBorde), posicionAlBorde)
 	}
 }
+
+
+/*describe "Al matar un personaje, se lo elimina del oponente"{
+	
+}
+*/
+

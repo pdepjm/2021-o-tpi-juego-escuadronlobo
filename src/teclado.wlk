@@ -4,6 +4,7 @@ import texto.*
 import direcciones.*
 import visuales.*
 import nivel.*
+import turnos.*
 
 object teclado{
 	
@@ -23,6 +24,11 @@ object teclado{
 		keyboard.down().onPressDo({ cursor.mover(abajo) })
 		keyboard.num(1).onPressDo({ cursor.seleccionarAtaque(1) })
 		keyboard.k().onPressDo({cursor.atacar()})
+		
 	}
+	method teclasTurno(){
+			keyboard.t().onPressDo({turno.pasarTurno()})
+		}
 }
+
 
