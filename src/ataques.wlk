@@ -58,12 +58,6 @@ object ningunAtaque{
 
 class ProyectilEnArco inherits Ataque {
 	var rangoMaximo = 3
-	var danio = 30
-		
-	override method realizarEfectoAtaque(posicion){
-		game.say(atacante, "pium pium")
-		game.uniqueCollider(cursor).recibirDanio(danio)
-	}
 	
 	// TODO: esto no es responsabilidad del ataque, ponerlo en otro lado?
 	override method posicionesAtacables() = tablero.posicionesCasillas().filter({ posicion => self.distanciaMenorA(posicion, rangoMaximo + 1) })
@@ -72,6 +66,15 @@ class ProyectilEnArco inherits Ataque {
 	method distanciaXMenorA(posicion, distancia) = self.distanciaX(posicion) < distancia
 	method distanciaYMenorA(posicion, distancia) = self.distanciaY(posicion) < distancia
 	method distanciaMenorA(posicion, distancia) = self.distanciaXMenorA(posicion, distancia) && self.distanciaYMenorA(posicion, distancia)
+}
+
+class GomeraDePiedras inherits ProyectilEnArco{
+	var danio = 30
+		
+	override method realizarEfectoAtaque(posicion){
+		game.say(atacante, "pium pium")
+		game.uniqueCollider(cursor).recibirDanio(danio)
+	}
 }
 
 class GomeraCuradora inherits ProyectilEnArco{
@@ -136,7 +139,7 @@ class GranadaCuracion inherits Granada {
 
 /*Uso:
  * Los personajes van a poder hacer un ataque, con algo así como personaje.atacar(ataque). 
- * Los personajes van a tener ataques que sean nuevas instancias de los distintos ataques.
+ * Los personajes van a tener ataques que sean nuevas instancias de los distintos ataques. * 
  * Esto permite que distintos personajes puedan tener ataques con el mismo comportamiento
  * pero distinto rango, daño base, etc. Por ejemplo podemos tener un personaje que pegue 
  * mucho con el cuchillo pero poco con un rifle, o un personaje francotirador que tenga mas
@@ -145,6 +148,7 @@ class GranadaCuracion inherits Granada {
  * del personaje) y además va a lanzar ese ataque desde la posición del personaje, mandando
  * al ataque elejido el mensaje lanzarAtaque(posición). El resto es responsabilidad del ataque.
  * 
- * 
+ * SI QUEREMOS SE PUEDEN COMPARTIR ATAQUES ENTRE JUGADORES, YA QUE EL JUGADOR SOLO SE GUARDA 
+ * ANTES DE REALIZAR EL ATAQUE Y SE BORRA CUANDO EL MISMO SE COMPLETA.
  * 
  */
