@@ -14,7 +14,7 @@ class Ataque{
 	
 	method mira() {
 		if (self.esAtacable(cursor.position())) return self.miraCuandoEstaEnElRango()
-		else return "cursor.png"
+		else return "prohibido.png"
 	}
 	
 	// para redefinir en cada clase heredera
@@ -59,15 +59,13 @@ object ningunAtaque{
 class ProyectilEnArco inherits Ataque {
 	var rangoMaximo = 3
 	var danio = 30
-	
-	override method miraCuandoEstaEnElRango() = "mira.png"
-	
+		
 	override method realizarEfectoAtaque(posicion){
 		game.say(atacante, "pium pium")
 		game.uniqueCollider(cursor).recibirDanio(danio)
 	}
 	
-	// TODO: repeticion de logica en estos dos (tamb estan en Personaje)
+	// TODO: esto no es responsabilidad del ataque, ponerlo en otro lado?
 	override method posicionesAtacables() = tablero.posicionesCasillas().filter({ posicion => self.distanciaMenorA(posicion, rangoMaximo + 1) })
 	method distanciaX(posicion) = (atacante.position().x() - posicion.x()).abs()
 	method distanciaY(posicion) = (atacante.position().y() - posicion.y()).abs()
@@ -76,8 +74,25 @@ class ProyectilEnArco inherits Ataque {
 	method distanciaMenorA(posicion, distancia) = self.distanciaXMenorA(posicion, distancia) && self.distanciaYMenorA(posicion, distancia)
 }
 
-class DisparoLineaRecta {
+class GomeraCuradora inherits ProyectilEnArco{
+	override method realizarEfectoAtaque(posicion){
+		var curacion = 30
+		
+		game.say(atacante, "te curo amigo")
+		game.uniqueCollider(cursor).curar(curacion)
+	}
+}
+
+class DisparoLineaRecta inherits Ataque {
 	var rango = 2
+	var danio = 50
+	
+	override method realizarEfectoAtaque(posicion){
+		game.say(atacante, "disparo")
+		game.uniqueCollider(cursor).recibirDanio(danio)
+	}
+	
+	override method posicionesAtacables() = tablero.casillasAlzanzablesEnUnaLineaRecta(atacante.position())
 }
 
 class AtaqueMele{ // clase abstracta

@@ -2,12 +2,12 @@ import wollok.game.*
 
 class Jugador {
 	var personajes = []
+	var property oponente = null
 	
 	method agregarPersonaje(personaje) {
 		personajes.add(personaje)
 		personaje.jugador(self)
 	}
-	
 	
 	method agregarPersonajes(listaPersonajes){
 		listaPersonajes.forEach({personaje => self.agregarPersonaje(personaje)})
@@ -21,7 +21,9 @@ class Jugador {
 	method ganar(){
 		game.addVisual(self)
 	}
-
+	
+	// para testear
+	method personajes() = personajes
 }
 
 object jugador1 inherits Jugador {

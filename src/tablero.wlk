@@ -72,6 +72,10 @@ object tablero{
 	}
 	
 	method posicionesCasillas() = casillas.map({casilla => casilla.position()})
+	
+	method casillasAlzanzablesEnUnaLineaRecta(casillero) = casillas.filter({casilla => casilla.puedeSerAlzanzadaEnUnaLineaRecta(casilla)}) 
+	//casilleros que estan en la misma fila o columna que el casillero pasado como parametro, y no tienen ningun objeto en el medio de los dos. 
+	method casillerosEntre(casilla, otraCasilla) = casillas.filter({casillero => casillero.estaEntre(casilla, otraCasilla)})
 }
 
 class CirculoVerde {
@@ -89,10 +93,6 @@ class Casillero{
 	
 	method position() = game.at(coordenadas.x() + 4, coordenadas.y() + 1)
 	
-	method ocupantes() = game.colliders(self)
-	
-	method ocupante(personaje) = self.ocupantes().contains(personaje)
-	
 	method habilitado() = habilitado
 	method deshabilitar() {habilitado = false}
 	method habilitar() {habilitado = true}
@@ -105,6 +105,15 @@ class Casillero{
 	method despintar(){
 		game.removeVisual(circuloVerde)
 	}
+	
+	// PROBAR
+	method mismaFila(otraCasilla) = self.coordenadas().x() == otraCasilla.coordenadas().x()
+	method mismaColumna(otraCasilla) = self.coordenadas().y() == otraCasilla.coordenadas().y()
+	method estaEntreDosEnLaMismaColumna(casilla, otraCasilla) = self.mismaColumna(casilla) and self.mismaColumna(otraCasilla) and self.coordenadas().x().between(casilla.coordenadas().y(), otraCasilla.coordenadas().y())
+	method estaEntreDosEnLaMismaFila(casilla, otraCasilla) = self.mismaFila(casilla) and self.mismaFila(otraCasilla) and self.coordenadas().x().between(casilla.coordenadas().x(), otraCasilla.coordenadas().x())
+	method puedeSerAlzanzadaEnUnaLineaRecta(otraCasilla) = tablero.casillerosEntre(self, otraCasilla).all({casilla => casilla.noTieneOcupantes()})
+	method estaEntre(casilla, otraCasilla) = self.estaEntreDosEnLaMismaFila(casilla, otraCasilla) or (self.estaEntreDosEnLaMismaColumna(casilla, otraCasilla))	
+//	method noTieneOcupantes() = self.ocupantes().size() == 0 // con ocupantes ya no se puede hacer porque ya no anda
 }
 
 class Coordenadas{

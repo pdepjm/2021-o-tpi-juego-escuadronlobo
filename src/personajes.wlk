@@ -28,11 +28,9 @@ class Personaje {
 	method distanciaMenorA(casillero, distancia) = distancia < self.position().distance(casillero)
 	
 	method morir(){
-		game.removeVisual(self)
-		efectos.explosion(tablero.casilleroDe(self))
 		jugador.matarPersonaje(self)
+		game.removeVisual(self)
 	}
-	
 	
 	method recibirDanio (cantidad) {
 		vida = (vida - cantidad).max(0)
@@ -47,7 +45,8 @@ class Personaje {
 	method ataque(numero) = ataques.get(numero - 1)
 	
 	method curar(cantidad) {
-		vida = vida + cantidad
+		vida = (vida + cantidad).min(100)
+		game.say(self, "Vida Recibida = " + cantidad.toString() + "\n Vida Restante = " + vida.toString())
 	}
 	
 }
