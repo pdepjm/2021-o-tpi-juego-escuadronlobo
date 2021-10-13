@@ -15,6 +15,8 @@ object configuracion{
     const property jugador2 = new Jugador(personajes = [soldadoNaziJp2])
 		
 	method configuracionInicial(){
+		tablero.configurarCasillas()
+		
 		jugador1.agregarPersonajes([soldadoNaziJp1])
 		jugador2.agregarPersonajes([soldadoNaziJp2])
 		

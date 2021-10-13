@@ -21,9 +21,7 @@ object teclado{
 		keyboard.right().onPressDo({ cursor.mover(derecha) })
 		keyboard.up().onPressDo({ cursor.mover(arriba) })
 		keyboard.down().onPressDo({ cursor.mover(abajo) })
-	}
-	method teclasAtaques(){
-		9.times({i => keyboard.num(i).onPressDo({ cursor.seleccionarAtaque(i) })})
+		keyboard.num(1).onPressDo({ cursor.seleccionarAtaque(1) })
 		keyboard.k().onPressDo({cursor.atacar()})
 	}
 }

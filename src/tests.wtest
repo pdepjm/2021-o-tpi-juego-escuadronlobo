@@ -7,10 +7,10 @@ import ataques.*
 
 describe "configuracionBoard" {
 	test "ubicacion esta en el board" {
-		assert.that(configuracionBoard.estaEnElBoard(game.at(configuracionBoard.anchoBoard(), configuracionBoard.altoBoard())))
+		assert.that(configuracionBoard.estaEnElBoard(game.at(configuracionBoard.anchoBoard() - 1, configuracionBoard.altoBoard() - 2)))
 	}
 	test "ubicacion no esta en el board" {
-		assert.notThat(configuracionBoard.estaEnElBoard(game.at(configuracionBoard.anchoBoard(), configuracionBoard.altoBoard() + 1)))
+		assert.notThat(configuracionBoard.estaEnElBoard(game.at(configuracionBoard.anchoBoard() - 1, configuracionBoard.altoBoard() - 1)))
 	}
 }
 
@@ -18,42 +18,11 @@ describe "configuracionBoard" {
 describe "objetos direcciones"{
 	var posicion = game.at(1,2)
 	var posicionSiguiente = game.at(0,2)
-	var posicionAlBorde = game.at(11,3)
+	var posicionAlBorde = game.at(2, configuracionBoard.altoBoard() - 1)
 	test "devuelve direccion siguiente si no se pasa del board"{
 		assert.equals(izquierda.proximaPosicion(posicion), posicionSiguiente)
 	}
 	test "devuelve direccion actual si se pasa del board"{
-		assert.equals(derecha.proximaPosicion(posicionAlBorde), posicionAlBorde)
-	}
-}
-
-describe "manejo de ataques con cursor"{
-	const ataque1 = new ProyectilEnArco()
-	const atacante = new Personaje(position = game.at(5,5), ataques = [ataque1], image = "soldadoNazi.png", vida = 100, rangoMaximoMovimiento = 4)
-	
-	test "seleccionarObjetivoAtaque con objetivo atacable"{
-		game.addVisual(atacante)
-		game.addVisual(cursor)
-		5.times({i => cursor.mover(arriba)})
-		5.times({i => cursor.mover(derecha)})
-		cursor.seleccionarAtaque(1)
-		cursor.mover(abajo)
-		cursor.seleccionarObjetivoAtaque()
-		assert.that(ataque1.objetivos().contains(cursor.position()))
-	}
-}
-
-describe "seleccionarAtaque"{
-	const ataque1 = new ProyectilEnArco()
-	const atacante = new Personaje(position = game.at(5,5), ataques = [ataque1], image = "soldadoNazi.png", vida = 100, rangoMaximoMovimiento = 4)
-	
-	test "seleccionarAtaque"{
-		tablero.configurarCasillas()
-		game.addVisual(atacante)
-		game.addVisual(cursor)
-		5.times({i => cursor.mover(arriba)})
-		5.times({i => cursor.mover(derecha)})
-		cursor.seleccionarAtaque(1)
-		assert.equals(cursor.ataqueSeleccionado(), ataque1)
+		assert.equals(arriba.proximaPosicion(posicionAlBorde), posicionAlBorde)
 	}
 }

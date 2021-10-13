@@ -10,17 +10,23 @@ object testear{
 class Ataque{
 	var atacante = null
 	
-	method mira() = "mira.png"
+	method miraCuandoEstaEnElRango() = "mira.png"
 	
+	method mira() {
+		if (self.esAtacable(cursor.position())) return self.miraCuandoEstaEnElRango()
+		else return "cursor.png"
+	}
 	
 	// para redefinir en cada clase heredera
-	method casillerosAtacables() = tablero.casillas() // son objetos CASILLA
+	method posicionesAtacables() = tablero.casillas().map({casilla => casilla.position()}) // son objetos POSITION
 	method realizarEfectoAtaque(_) {}
 	method objetivosMaximos() = 1
 	
 	method marcarComoSeleccionado(nuevoAtacante){
+		game.say(cursor, "ataque seleccionado")
+		
 		atacante = nuevoAtacante
-//		tablero.pintarCasilleros(self.casillerosAtacables())
+//		tablero.pintarCasillerosEn(self.posicionesAtacables())
 	}
 	
 	method realizarAtaque(posicion){
@@ -37,7 +43,7 @@ class Ataque{
 		atacante = null
 	}
 	
-	method esAtacable(posicion) = self.casillerosAtacables().map({casillero => casillero.position()}).contains(posicion)
+	method esAtacable(posicion) = self.posicionesAtacables().contains(posicion)
 	
 	// para testear
 	method atacante() = atacante
@@ -54,23 +60,20 @@ class ProyectilEnArco inherits Ataque {
 	var rangoMaximo = 3
 	var danio = 30
 	
+	override method miraCuandoEstaEnElRango() = "mira.png"
+	
 	override method realizarEfectoAtaque(posicion){
 		game.say(atacante, "pium pium")
 		game.uniqueCollider(cursor).recibirDanio(danio)
 	}
 	
-	override method mira() {
-		if (self.esAtacable(cursor.position())) return "mira.png"
-		else return "cursor.png"
-	}
-	
 	// TODO: repeticion de logica en estos dos (tamb estan en Personaje)
-	override method casillerosAtacables() = tablero.casillas().filter({ casilla => self.distanciaMenorA(casilla.position(), rangoMaximo + 1) })
-	method distanciaX(otroCasillero) = (atacante.position().x() - otroCasillero.x()).abs()
-	method distanciaY(otroCasillero) = (atacante.position().y() - otroCasillero.y()).abs()
-	method distanciaXMenorA(casillero, distancia) = self.distanciaX(casillero) < distancia
-	method distanciaYMenorA(casillero, distancia) = self.distanciaY(casillero) < distancia
-	method distanciaMenorA(casillero, distancia) = self.distanciaXMenorA(casillero, distancia) && self.distanciaYMenorA(casillero, distancia)
+	override method posicionesAtacables() = tablero.posicionesCasillas().filter({ posicion => self.distanciaMenorA(posicion, rangoMaximo + 1) })
+	method distanciaX(posicion) = (atacante.position().x() - posicion.x()).abs()
+	method distanciaY(posicion) = (atacante.position().y() - posicion.y()).abs()
+	method distanciaXMenorA(posicion, distancia) = self.distanciaX(posicion) < distancia
+	method distanciaYMenorA(posicion, distancia) = self.distanciaY(posicion) < distancia
+	method distanciaMenorA(posicion, distancia) = self.distanciaXMenorA(posicion, distancia) && self.distanciaYMenorA(posicion, distancia)
 }
 
 class DisparoLineaRecta {

@@ -44,7 +44,7 @@ object cursor{
 }
 
 object tablero{
-	const tamanioVertical = 8
+	const tamanioVertical = 7
 	const tamanioHorizontal = 8
 	var casillasPintadas = []
 	
@@ -55,21 +55,23 @@ object tablero{
 		
 	method casillero(x, y) = casillas.find({casillero => casillero.coordenadas().x() == x && casillero.coordenadas().y() == y})
 	
-	method crearFila(n) { tamanioVertical.times({i => casillas.add(new Casillero(coordenadas = new Coordenadas(x = i, y = n)))}) }
-	method crearCasillas() { tamanioHorizontal.times({i => self.crearFila(i)}) }
+	method crearFila(n) { tamanioHorizontal.times({i => casillas.add(new Casillero(coordenadas = new Coordenadas(x = i, y = n)))}) }
+	method crearCasillas() { tamanioVertical.times({i => self.crearFila(i)}) }
 	
 	method configurarCasillas() { 
 		self.crearCasillas()
 	}
 	
-	method pintarCasilleros(casilleros) {
-		casillasPintadas = casilleros
-		casilleros.forEach({casillero => casillero.pintar()})
+	method pintarCasillerosEn(posiciones) {
+		casillasPintadas = posiciones.map({ubicacion => self.casillero(ubicacion.x(), ubicacion.y())})
+		casillasPintadas.forEach({casillero => casillero.pintar()})
 	}
 	
 	method despintarCasillerosAtaque() {
 		casillasPintadas.forEach({casilla => casilla.despintar()})
 	}
+	
+	method posicionesCasillas() = casillas.map({casilla => casilla.position()})
 }
 
 class CirculoVerde {
@@ -127,5 +129,6 @@ object configuracionBoard {
 		game.width(anchoBoard)
 	}
 	
-	method estaEnElBoard(ubicacion) = (ubicacion.x().between(0, anchoBoard-1)) && (ubicacion.y().between(0, altoBoard-2))
+	method estaEnElBoard(ubicacion) = (ubicacion.x().between(0, anchoBoard-1)) && (ubicacion.y().between(0, altoBoard-2)) 
+	// hacemos que no sea accesible la fila de arriba del board porque el cursor queda cortado e igual ahi iria solamente el marcador con los puntos
 }
