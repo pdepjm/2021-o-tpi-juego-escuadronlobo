@@ -6,12 +6,27 @@ import visuales.*
 import teclado.*
 import personajes.*
 import ataques.*
+import jugadores.*
 
 object configuracion{
+	const  soldadoNaziJp1 = new Personaje(rangoMaximoMovimiento = 2, image = "soldadoNazi.png", vida = 100, ataques = [new ProyectilEnArco()])
+	const  soldadoNaziJp2 = new Personaje(rangoMaximoMovimiento = 2, image = "soldadoNazi.png", position = game.at(16,8), vida = 100, ataques = [new ProyectilEnArco()])
+		
 	method configuracionInicial(){
-		game.addVisual(new Personaje(rangoMaximoMovimiento = 2, image = "soldadoNazi.png", vida = 100, ataques = [new ProyectilEnArco()]))
+		jugador1.agregarPersonajes([soldadoNaziJp1])
+		jugador2.agregarPersonajes([soldadoNaziJp2])
+		
+		game.addVisual(soldadoNaziJp1)
+		game.addVisual(soldadoNaziJp2)
 		game.addVisual(cursor)		
 	}
+	
+	method terminarPartida(){
+		if(jugador1.perdio()){
+			pantallaGanador.mostrar()
+		}
+	}
+	
 }
 	
 object menuPrincipal {
@@ -29,7 +44,15 @@ object menuPrincipal {
 }
 
 
+object pantallaGanador {
+	var property position = game.at(0,0)
+	var property image = "pantallaGanadorJ1.png"
+	 
+	method mostrar(){
+		game.addVisual(self)
+	}
 		
+}		
 	
 	
 		
