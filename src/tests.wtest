@@ -27,6 +27,26 @@ describe "objetos direcciones"{
 	}
 }
 
+describe "Personajes" {
+	const soldadoNazi = new Personaje(rangoMaximoMovimiento = 2, image = "soldadoNazi.png", vida = 100)
+	const pepita = new Personaje(rangoMaximoMovimiento =4, image = "pepita.png", vida = 150)
+	
+	method initialize() {
+		game.addVisual(pepita)
+		game.addVisual(soldadoNazi)
+	} 
+	
+	test "Personaje que puede recibir daño" {
+		soldadoNazi.recibirDanio(50)
+		assert.equals(50, soldadoNazi.vida())
+	}
+	
+	test "Personaje que se muere al descontar todos sus puntos de vida" {
+		pepita.recibirDanio(150)
+		assert.equals(0, pepita.vida())
+		assert.notThat(game.hasVisual(pepita))
+	}
+}
 
 /*describe "Al matar un personaje, se lo elimina del oponente"{
 	
