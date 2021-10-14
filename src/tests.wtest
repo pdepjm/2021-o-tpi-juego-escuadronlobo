@@ -4,6 +4,7 @@ import tablero.*
 import direcciones.*
 import personajes.*
 import ataques.*
+import jugadores.*
 
 describe "configuracionBoard" {
 	test "ubicacion esta en el board" {
@@ -29,7 +30,8 @@ describe "objetos direcciones"{
 
 describe "Personajes" {
 	const soldadoNazi = new Personaje(rangoMaximoMovimiento = 2, image = "soldadoNazi.png", vida = 100)
-	const pepita = new Personaje(rangoMaximoMovimiento =4, image = "pepita.png", vida = 150)
+	const pepita = new Personaje(rangoMaximoMovimiento =4, image = "pepita.png", vida = 150, jugador = new Jugador(personajes = [pepita]))
+	
 	
 	method initialize() {
 		game.addVisual(pepita)
@@ -45,6 +47,7 @@ describe "Personajes" {
 		pepita.recibirDanio(150)
 		assert.equals(0, pepita.vida())
 		assert.notThat(game.hasVisual(pepita))
+		assert.notThat(pepita.jugador().esDeJugador(pepita))
 	}
 }
 
