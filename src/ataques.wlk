@@ -56,7 +56,7 @@ object ningunAtaque{
 	method mira() = "cursor.png" 
 }
 
-class ProyectilEnArco inherits Ataque {
+class ProyectilEnArco inherits Ataque { // clase abstracta
 	var rangoMaximo = 3
 	
 	// TODO: esto no es responsabilidad del ataque, ponerlo en otro lado?
