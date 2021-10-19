@@ -4,6 +4,9 @@ import tablero.*
 object turno {
 	
 	method pasarTurno(){
+		
+		
+		
 		self.chequearGanador()
 		// cursor.cambiarColor()
 	}
