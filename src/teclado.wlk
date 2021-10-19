@@ -5,6 +5,7 @@ import direcciones.*
 import visuales.*
 import nivel.*
 import turnos.*
+import jugadores.*
 
 object teclado{
 	
@@ -17,7 +18,13 @@ object teclado{
 	}
 	
 	method teclasCursor(){
-		keyboard.enter().onPressDo({ cursor.seleccionar() })
+		keyboard.enter().onPressDo({ if (jugador1.turno()){
+			jugador1.seleccionar()
+		} else {
+			jugador2.seleccionar()
+		}
+		
+		})
 		keyboard.left().onPressDo({ cursor.mover(izquierda) })
 		keyboard.right().onPressDo({ cursor.mover(derecha) })
 		keyboard.up().onPressDo({ cursor.mover(arriba) })
@@ -26,8 +33,13 @@ object teclado{
 		keyboard.k().onPressDo({cursor.atacar()})
 		
 	}
+	
 	method teclasTurno(){
-			keyboard.t().onPressDo({turno.pasarTurno()})
+			keyboard.t().onPressDo({if (jugador1.turno()){
+			jugador1.pasarTurnoA(jugador2)
+		} else {
+			jugador2.pasarTurnoA(jugador1)
+		}})
 		}
 }
 
