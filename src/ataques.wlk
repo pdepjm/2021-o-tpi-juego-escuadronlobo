@@ -75,15 +75,19 @@ class GomeraDePiedras inherits ProyectilEnArco{
 		game.say(atacante, "pium pium")
 		game.uniqueCollider(cursor).recibirDanio(danio)
 	}
+	//para testear
+	method danio() = danio
 }
 
 class GomeraCuradora inherits ProyectilEnArco{
+	var curacion = 30
+	
 	override method realizarEfectoAtaque(posicion){
-		var curacion = 30
-		
 		game.say(atacante, "te curo amigo")
 		game.uniqueCollider(cursor).curar(curacion)
 	}
+	// para testear
+	method curacion() = curacion
 }
 
 class DisparoLineaRecta inherits Ataque {

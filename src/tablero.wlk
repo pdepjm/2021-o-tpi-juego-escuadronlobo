@@ -12,7 +12,7 @@ object cursor{
 	method image() = ataqueSeleccionado.mira()
 	method mover(direccion) {
 		position = direccion.proximaPosicion(position)
-		if (seleccionado != null) seleccionado.mover(direccion) 
+		if (seleccionado != null && ataqueSeleccionado == ningunAtaque) seleccionado.mover(direccion) 
 	}
 	
 	method ubicacionOcupada(){ game.colliders(self).any({visual => visual.ocupaEspacio()}) }

@@ -32,10 +32,10 @@ describe "Personajes" {
 	const soldadoNazi = new Personaje(rangoMaximoMovimiento = 2, image = "soldadoNazi.png", vida = 100)
 	const pepita = new Personaje(rangoMaximoMovimiento =4, image = "pepita.png", vida = 150, jugador = new Jugador(personajes = [pepita]))
 	
-	
 	method initialize() {
 		game.addVisual(pepita)
 		game.addVisual(soldadoNazi)
+		pepita.jugador().oponente(jugador2)
 	} 
 	
 	test "Personaje que puede recibir daño" {
@@ -49,6 +49,52 @@ describe "Personajes" {
 		assert.notThat(game.hasVisual(pepita))
 		assert.notThat(pepita.jugador().esDeJugador(pepita))
 	}
+}
+
+describe "ataques"{
+	var gomeraDePiedras = new GomeraDePiedras()
+	var gomeraCuradora= new GomeraCuradora()
+	const atacante = new Personaje(rangoMaximoMovimiento = 2, image = "soldadoNazi.png", position = game.at(7,7), vida = 100, ataques = [gomeraDePiedras, gomeraCuradora])
+	const atacado = new Personaje(rangoMaximoMovimiento = 2, image = "soldadoNazi.png", position = game.at(7,6), vida = 70, ataques = [])
+	test "se puede seleccionar el ataque"{
+		tablero.configurarCasillas()
+		game.addVisual(cursor)
+		game.addVisual(atacante)
+		7.times({i => cursor.mover(derecha)})
+		7.times({i => cursor.mover(arriba)})
+		cursor.seleccionarAtaque(1)
+		assert.equals(gomeraDePiedras.atacante(), atacante)
+		assert.equals(cursor.ataqueSeleccionado(), gomeraDePiedras)
+	}
+	test "GomeraDePiedras hace su efecto. Los Personajes reciben danio."{
+		tablero.configurarCasillas()
+		game.addVisual(cursor)
+		game.addVisual(atacado)
+		game.addVisual(atacante)
+		7.times({i => cursor.mover(derecha)})
+		6.times({i => cursor.mover(arriba)})
+		// estas proximas dos lineas son lo mismo que cursor.seleccionarAtaque(1), lo que testea el test anterior
+		gomeraDePiedras.marcarComoSeleccionado(atacante)
+		cursor.ataqueSeleccionado(gomeraDePiedras)
+		cursor.atacar()
+		assert.equals(cursor.ataqueSeleccionado(), ningunAtaque)
+		assert.equals(atacado.vida(), 70 - gomeraDePiedras.danio())
+	}
+	test "GomeraCuradora hace su efecto. Los Personajes se curan."{
+		tablero.configurarCasillas()
+		game.addVisual(cursor)
+		game.addVisual(atacado)
+		game.addVisual(atacante)
+		7.times({i => cursor.mover(derecha)})
+		6.times({i => cursor.mover(arriba)})
+		// estas proximas dos lineas son lo mismo que cursor.seleccionarAtaque(1), lo que testea el test anterior
+		gomeraCuradora.marcarComoSeleccionado(atacante)
+		cursor.ataqueSeleccionado(gomeraCuradora)
+		cursor.atacar()
+		assert.equals(cursor.ataqueSeleccionado(), ningunAtaque)
+		assert.equals(atacado.vida(), 70 + gomeraCuradora.curacion())
+	}
+	// lo de los casilleros atacables testearlo a mano, es mas intuitivo que estar viendo que de bien la lista de coordenadas.
 }
 
 /*describe "Al matar un personaje, se lo elimina del oponente"{

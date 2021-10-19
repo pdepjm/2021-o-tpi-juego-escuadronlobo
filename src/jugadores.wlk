@@ -14,7 +14,10 @@ class Jugador {
 	} 
 	method esDeJugador(personaje) = personajes.contains(personaje)
 	
-	method matarPersonaje(personaje) = personajes.remove(personaje)
+	method matarPersonaje(personaje) {
+		personajes.remove(personaje)
+		if (self.perdio()) oponente.ganar()
+	}
 	
 	method perdio() = personajes == []
 	
