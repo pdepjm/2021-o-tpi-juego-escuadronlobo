@@ -50,7 +50,7 @@ object tablero{
 	const casillas = []
 	method casillas() = casillas
 	
-	method casilleroDe(personaje) = casillas.find({ casillero => casillero.ocupante(personaje) })
+	method casilleroDe(personaje) = casillas.find({ casillero => casillero.estaOcupado() and (casillero.ocupante() == personaje) })
 		
 	method casillero(x, y) = casillas.find({casillero => casillero.coordenadas().x() == x && casillero.coordenadas().y() == y})
 	
@@ -72,8 +72,11 @@ object tablero{
 	
 	method posicionesCasillas() = casillas.map({casilla => casilla.position()})
 	
-	method casillasAlzanzablesEnUnaLineaRecta(casillero) = casillas.filter({casilla => casilla.puedeSerAlzanzadaEnUnaLineaRecta(casilla)}) 
-	//casilleros que estan en la misma fila o columna que el casillero pasado como parametro, y no tienen ningun objeto en el medio de los dos. 
+	//casilleros que estan en la misma fila o columna que el casillero pasado como parametro, y no tienen ningun objeto en el medio de los dos.
+	method casillasAlcanzablesEnUnaLineaRecta(casilla) = casillas.filter({otroCasillero => casilla.puedeSerAlcanzadaEnUnaLineaRecta(otroCasillero)})
+	
+	method casillasEnLaMismaFilaOColumna(casillero)= casillas.filter({otraCasilla => otraCasilla.mismaFilaOColumna(otraCasilla)})
+	
 	method casillerosEntre(casilla, otraCasilla) = casillas.filter({casillero => casillero.estaEntre(casilla, otraCasilla)})
 }
 
@@ -105,19 +108,33 @@ class Casillero{
 		game.removeVisual(circuloVerde)
 	}
 	
+	method estaOcupado() =  game.getObjectsIn(self.position())!= []
+	
+	method ocupante(){
+		if (self.estaOcupado()) return game.getObjectsIn(self.position()).uniqueElement()
+		else throw new DomainException(message = "no hay un ocupante en el casillero") // tira un error si el casillero no esta ocupado
+	}
+	
 	// PROBAR
-	method mismaFila(otraCasilla) = self.coordenadas().x() == otraCasilla.coordenadas().x()
-	method mismaColumna(otraCasilla) = self.coordenadas().y() == otraCasilla.coordenadas().y()
-	method estaEntreDosEnLaMismaColumna(casilla, otraCasilla) = self.mismaColumna(casilla) and self.mismaColumna(otraCasilla) and self.coordenadas().x().between(casilla.coordenadas().y(), otraCasilla.coordenadas().y())
+	method mismaFila(otraCasilla) = self.coordenadas().y() == otraCasilla.coordenadas().y()
+	method mismaColumna(otraCasilla) = self.coordenadas().x() == otraCasilla.coordenadas().x()
+	method estaEntreDosEnLaMismaColumna(casilla, otraCasilla) = self.mismaColumna(casilla) and self.mismaColumna(otraCasilla) and self.coordenadas().y().between(casilla.coordenadas().y(), otraCasilla.coordenadas().y())
 	method estaEntreDosEnLaMismaFila(casilla, otraCasilla) = self.mismaFila(casilla) and self.mismaFila(otraCasilla) and self.coordenadas().x().between(casilla.coordenadas().x(), otraCasilla.coordenadas().x())
-	method puedeSerAlzanzadaEnUnaLineaRecta(otraCasilla) = tablero.casillerosEntre(self, otraCasilla).all({casilla => casilla.noTieneOcupantes()})
-	method estaEntre(casilla, otraCasilla) = self.estaEntreDosEnLaMismaFila(casilla, otraCasilla) or (self.estaEntreDosEnLaMismaColumna(casilla, otraCasilla))	
-//	method noTieneOcupantes() = self.ocupantes().size() == 0 // con ocupantes ya no se puede hacer porque ya no anda
+	method estaEntre(casilla, otraCasilla) = self.estaEntreDosEnLaMismaFila(casilla, otraCasilla) or (self.estaEntreDosEnLaMismaColumna(casilla, otraCasilla))
+	method mismaFilaOColumna(otraCasilla) = self.mismaFila(otraCasilla) or self.mismaColumna(otraCasilla)
+	
+	//se cumple si las dos casillas
+	method puedeSerAlcanzadaEnUnaLineaRecta(otraCasilla) = self.mismaFilaOColumna(otraCasilla) and tablero.casillerosEntre(self, otraCasilla).all({casilla => !casilla.estaOcupado()})
 }
 
 class Coordenadas{
 	var property x = 0
 	var property y = 0
+	
+	// hace que se pueda mostrar en consola	
+	override method toString(){
+		return "(" + x.toString() + "," + y.toString() + ")"
+	}
 }
 
 object efectos{

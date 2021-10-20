@@ -99,7 +99,7 @@ class DisparoLineaRecta inherits Ataque {
 		game.uniqueCollider(cursor).recibirDanio(danio)
 	}
 	
-	override method posicionesAtacables() = tablero.casillasAlzanzablesEnUnaLineaRecta(atacante.position())
+	override method posicionesAtacables() = tablero.casillasAlcanzablesEnUnaLineaRecta(atacante.position())
 }
 
 class AtaqueMele{ // clase abstracta
