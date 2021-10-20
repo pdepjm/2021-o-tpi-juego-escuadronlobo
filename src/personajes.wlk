@@ -6,9 +6,9 @@ import nivel.*
 
 class Personaje {
 	const rangoMaximoMovimiento // De Prueba: rangoMaximoMomiento = 2
-	var position = game.at(0,8)
-	var image
-	var vida
+	var position
+	var property image
+	var property vida
 	const ataques = []
 	var property jugador = null
 	
@@ -17,9 +17,7 @@ class Personaje {
 		position = direccion.proximaPosicion(position)
 	}
 	
-	method vida() = vida
 	method position() = position
-	method image() = image
 
 	method ocupaEspacio() = true
 	
