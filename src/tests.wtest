@@ -29,18 +29,22 @@ describe "objetos direcciones"{
 }
 
 describe "Personajes" {
-	const soldadoNazi = new Personaje(rangoMaximoMovimiento = 2, image = "soldadoNazi.png", vida = 100)
-	const pepita = new Personaje(rangoMaximoMovimiento =4, image = "pepita.png", vida = 150, jugador = new Jugador(personajes = [pepita]))
+	const soldadoNazi = new Personaje(rangoMaximoMovimiento = 2, position = game.at(0,8), image = "soldadoNazi.png", vida = 100, jugador = new Jugador(personajes = [soldadoNazi]), ataques = [new GomeraDePiedras()])
+	const healer = new Personaje(rangoMaximoMovimiento = 5, image = "healer.png", position = game.at(0, 10), vida = 50, jugador = new Jugador(personajes = [healer]), ataques = [new GomeraCuradora()])
+	const pepita = new Personaje(rangoMaximoMovimiento = 4, image = "pepita.png", position = game.at(0, 9), vida = 150, jugador = new Jugador(personajes = [pepita, healer]))
 	
 	method initialize() {
 		game.addVisual(pepita)
 		game.addVisual(soldadoNazi)
-		pepita.jugador().oponente(jugador2)
+		game.addVisual(healer)
+		game.addVisual(cursor)
 	} 
 	
-	test "Personaje que puede recibir daño" {
-		soldadoNazi.recibirDanio(50)
-		assert.equals(50, soldadoNazi.vida())
+	test "Personaje que puede recibir daño de otro personaje" {
+		cursor.position(game.at(0,9))
+		soldadoNazi.ataque(1).atacante(soldadoNazi)
+		soldadoNazi.ataque(1).realizarEfectoAtaque(game.at(0,9)) // donde está pepita
+		assert.equals(120, pepita.vida())
 	}
 	
 	test "Personaje que se muere al descontar todos sus puntos de vida" {
@@ -56,6 +60,10 @@ describe "ataques"{
 	var gomeraCuradora= new GomeraCuradora()
 	const atacante = new Personaje(rangoMaximoMovimiento = 2, image = "soldadoNazi.png", position = game.at(7,7), vida = 100, ataques = [gomeraDePiedras, gomeraCuradora])
 	const atacado = new Personaje(rangoMaximoMovimiento = 2, image = "soldadoNazi.png", position = game.at(7,6), vida = 70, ataques = [])
+	const curado = new Personaje(rangoMaximoMovimiento = 2, image = "soldadoNazi.png", position = game.at(6,6), vida = 70, ataques = [])
+	
+	// ya se que repite codigo y podria haber hecho un initialize, pero con el initialize me daba error, creo que wollok game no se resetea despues de cada test o algo asi
+	
 	test "se puede seleccionar el ataque"{
 		tablero.configurarCasillas()
 		game.addVisual(cursor)
@@ -83,16 +91,16 @@ describe "ataques"{
 	test "GomeraCuradora hace su efecto. Los Personajes se curan."{
 		tablero.configurarCasillas()
 		game.addVisual(cursor)
-		game.addVisual(atacado)
+		game.addVisual(curado)
 		game.addVisual(atacante)
-		7.times({i => cursor.mover(derecha)})
+		6.times({i => cursor.mover(derecha)})
 		6.times({i => cursor.mover(arriba)})
 		// estas proximas dos lineas son lo mismo que cursor.seleccionarAtaque(1), lo que testea el test anterior
 		gomeraCuradora.marcarComoSeleccionado(atacante)
 		cursor.ataqueSeleccionado(gomeraCuradora)
 		cursor.atacar()
 		assert.equals(cursor.ataqueSeleccionado(), ningunAtaque)
-		assert.equals(atacado.vida(), 70 + gomeraCuradora.curacion())
+		assert.equals(curado.vida(), 70 + gomeraCuradora.curacion())
 	}
 	// lo de los casilleros atacables testearlo a mano, es mas intuitivo que estar viendo que de bien la lista de coordenadas.
 }
