@@ -3,12 +3,12 @@ import direcciones.*
 import ataques.*
 
 object cursor{
-	var position = game.at(0,0)
+	var property position = game.at(0,0)
 	var seleccionado = null
 	var ataqueSeleccionado = ningunAtaque
 	//const ubicacionesOcupadas = #{}
 
-	method position() = position
+	// method position() = position
 	method image() = ataqueSeleccionado.mira()
 	method mover(direccion) {
 		position = direccion.proximaPosicion(position)
