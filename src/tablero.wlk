@@ -3,7 +3,7 @@ import direcciones.*
 import ataques.*
 
 object cursor{
-	var property position = game.at(0,0)
+	var property position = game.at(0,7)
 	var seleccionado = null
 	var ataqueSeleccionado = ningunAtaque
 	//const ubicacionesOcupadas = #{}
@@ -93,7 +93,7 @@ class Casillero{
 	
 	method coordenadas() = coordenadas
 	
-	method position() = game.at(coordenadas.x() + 4, coordenadas.y() + 1)
+	method position() = game.at(coordenadas.x() + 2, coordenadas.y())
 	
 	method habilitado() = habilitado
 	method deshabilitar() {habilitado = false}
@@ -144,9 +144,9 @@ object efectos{
 }
 
 object configuracionBoard {
-	const property anchoBoard = 17
-	const property altoBoard = 11
-	const property tamanioCeldaBoard = 70
+	const property anchoBoard = 15
+	const property altoBoard = 9
+	const property tamanioCeldaBoard = 90
 	
 	method configurarBoard() {
 		game.cellSize(tamanioCeldaBoard)
