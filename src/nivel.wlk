@@ -33,7 +33,7 @@ object configuracion{
 }
 	
 object menuPrincipal {
-		var property position = game.at(-1,-1)
+		var property position = game.at(-1,0)
 		var property image = "menuPrincipal.png"
 		var property menuHabilitado = true	
 		
