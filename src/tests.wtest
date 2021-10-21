@@ -69,7 +69,6 @@ describe "ataques"{
 		game.addVisual(cursor)
 		game.addVisual(atacante)
 		7.times({i => cursor.mover(derecha)})
-		7.times({i => cursor.mover(arriba)})
 		cursor.seleccionarAtaque(1)
 		assert.equals(gomeraDePiedras.atacante(), atacante)
 		assert.equals(cursor.ataqueSeleccionado(), gomeraDePiedras)
@@ -80,10 +79,10 @@ describe "ataques"{
 		game.addVisual(atacado)
 		game.addVisual(atacante)
 		7.times({i => cursor.mover(derecha)})
-		6.times({i => cursor.mover(arriba)})
 		// estas proximas dos lineas son lo mismo que cursor.seleccionarAtaque(1), lo que testea el test anterior
 		gomeraDePiedras.marcarComoSeleccionado(atacante)
 		cursor.ataqueSeleccionado(gomeraDePiedras)
+		1.times({i => cursor.mover(abajo)})
 		cursor.atacar()
 		assert.equals(cursor.ataqueSeleccionado(), ningunAtaque)
 		assert.equals(atacado.vida(), 70 - gomeraDePiedras.danio())
@@ -94,7 +93,7 @@ describe "ataques"{
 		game.addVisual(curado)
 		game.addVisual(atacante)
 		6.times({i => cursor.mover(derecha)})
-		6.times({i => cursor.mover(arriba)})
+		1.times({i => cursor.mover(abajo)})
 		// estas proximas dos lineas son lo mismo que cursor.seleccionarAtaque(1), lo que testea el test anterior
 		gomeraCuradora.marcarComoSeleccionado(atacante)
 		cursor.ataqueSeleccionado(gomeraCuradora)
@@ -131,17 +130,17 @@ describe "tablero"{
 	
 	test "casillero ocupado"{
 		game.addVisual(josesito)
-		assert.that(tablero.casillero(1,4).estaOcupado())
+		assert.that(tablero.casillero(3,5).estaOcupado())
 		game.removeVisual(josesito)
 	}
 	
 	test "casillero vacio"{
-		assert.notThat(tablero.casillero(1,4).estaOcupado())		
+		assert.notThat(tablero.casillero(3,5).estaOcupado())		
 	}
 	
 	test "ocupante de un casillero ocupado"{
 		game.addVisual(josesito)
-		assert.equals(josesito, tablero.casillero(1,4).ocupante())
+		assert.equals(josesito, tablero.casillero(3,5).ocupante())
 		game.removeVisual(josesito)
 	}
 	
@@ -151,7 +150,7 @@ describe "tablero"{
 	
 	test "casillero de un personaje"{
 		game.addVisual(josesito)
-		assert.equals(tablero.casillero(1,4), tablero.casilleroDe(josesito))
+		assert.equals(tablero.casillero(3,5), tablero.casilleroDe(josesito))
 	}
 }
 
