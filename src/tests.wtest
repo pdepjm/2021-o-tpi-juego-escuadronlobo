@@ -40,19 +40,27 @@ describe "Personajes" {
 		game.addVisual(cursor)
 	} 
 	
-	test "Personaje que puede recibir daño de otro personaje" {
-		cursor.position(game.at(0,9))
+	method posicionCursor(posicion) {
+		cursor.position(posicion)
+	}
+	
+	test "Personaje que ataca a otro personaje" {
+		self.posicionCursor(game.at(0,9))
 		soldadoNazi.ataque(1).atacante(soldadoNazi)
 		soldadoNazi.ataque(1).realizarEfectoAtaque(game.at(0,9)) // donde está pepita
 		assert.equals(120, pepita.vida())
 	}
-	
+	/* 
 	test "Personaje que se muere al descontar todos sus puntos de vida" {
-		pepita.recibirDanio(150)
+		cursor.position(game.at(0,9))
+		soldadoNazi.ataque(1).atacante(soldadoNazi)
+		5.times({i => soldadoNazi.ataque(1).realizarEfectoAtaque(game.at(0,9))})
+		// pepita.recibirDanio(150)
 		assert.equals(0, pepita.vida())
 		assert.notThat(game.hasVisual(pepita))
 		assert.notThat(pepita.jugador().esDeJugador(pepita))
 	}
+	*/
 }
 
 describe "ataques"{
@@ -69,7 +77,6 @@ describe "ataques"{
 		game.addVisual(cursor)
 		game.addVisual(atacante)
 		7.times({i => cursor.mover(derecha)})
-		7.times({i => cursor.mover(arriba)})
 		cursor.seleccionarAtaque(1)
 		assert.equals(gomeraDePiedras.atacante(), atacante)
 		assert.equals(cursor.ataqueSeleccionado(), gomeraDePiedras)
@@ -80,10 +87,10 @@ describe "ataques"{
 		game.addVisual(atacado)
 		game.addVisual(atacante)
 		7.times({i => cursor.mover(derecha)})
-		6.times({i => cursor.mover(arriba)})
 		// estas proximas dos lineas son lo mismo que cursor.seleccionarAtaque(1), lo que testea el test anterior
 		gomeraDePiedras.marcarComoSeleccionado(atacante)
 		cursor.ataqueSeleccionado(gomeraDePiedras)
+		1.times({i => cursor.mover(abajo)})
 		cursor.atacar()
 		assert.equals(cursor.ataqueSeleccionado(), ningunAtaque)
 		assert.equals(atacado.vida(), 70 - gomeraDePiedras.danio())
@@ -94,7 +101,7 @@ describe "ataques"{
 		game.addVisual(curado)
 		game.addVisual(atacante)
 		6.times({i => cursor.mover(derecha)})
-		6.times({i => cursor.mover(arriba)})
+		1.times({i => cursor.mover(abajo)})
 		// estas proximas dos lineas son lo mismo que cursor.seleccionarAtaque(1), lo que testea el test anterior
 		gomeraCuradora.marcarComoSeleccionado(atacante)
 		cursor.ataqueSeleccionado(gomeraCuradora)
@@ -131,17 +138,17 @@ describe "tablero"{
 	
 	test "casillero ocupado"{
 		game.addVisual(josesito)
-		assert.that(tablero.casillero(1,4).estaOcupado())
+		assert.that(tablero.casillero(3,5).estaOcupado())
 		game.removeVisual(josesito)
 	}
 	
 	test "casillero vacio"{
-		assert.notThat(tablero.casillero(1,4).estaOcupado())		
+		assert.notThat(tablero.casillero(3,5).estaOcupado())		
 	}
 	
 	test "ocupante de un casillero ocupado"{
 		game.addVisual(josesito)
-		assert.equals(josesito, tablero.casillero(1,4).ocupante())
+		assert.equals(josesito, tablero.casillero(3,5).ocupante())
 		game.removeVisual(josesito)
 	}
 	
@@ -151,7 +158,7 @@ describe "tablero"{
 	
 	test "casillero de un personaje"{
 		game.addVisual(josesito)
-		assert.equals(tablero.casillero(1,4), tablero.casilleroDe(josesito))
+		assert.equals(tablero.casillero(3,5), tablero.casilleroDe(josesito))
 	}
 }
 
