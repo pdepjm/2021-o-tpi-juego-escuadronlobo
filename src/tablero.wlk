@@ -118,8 +118,8 @@ class Casillero{
 	// PROBAR
 	method mismaFila(otraCasilla) = self.coordenadas().y() == otraCasilla.coordenadas().y()
 	method mismaColumna(otraCasilla) = self.coordenadas().x() == otraCasilla.coordenadas().x()
-	method estaEntreDosEnLaMismaColumna(casilla, otraCasilla) = self.mismaColumna(casilla) and self.mismaColumna(otraCasilla) and self.coordenadas().y().between(casilla.coordenadas().y(), otraCasilla.coordenadas().y())
-	method estaEntreDosEnLaMismaFila(casilla, otraCasilla) = self.mismaFila(casilla) and self.mismaFila(otraCasilla) and self.coordenadas().x().between(casilla.coordenadas().x(), otraCasilla.coordenadas().x())
+	method estaEntreDosEnLaMismaColumna(casilla, otraCasilla) = self.mismaColumna(casilla) and self.mismaColumna(otraCasilla) and self.coordenadas().y().between(casilla.coordenadas().y(), otraCasilla.coordenadas().y()) and self.coordenadas().y() != casilla.coordenadas().y() and self.coordenadas().y() != otraCasilla.coordenadas().y()
+	method estaEntreDosEnLaMismaFila(casilla, otraCasilla) = self.mismaFila(casilla) and self.mismaFila(otraCasilla) and self.coordenadas().x().between(casilla.coordenadas().x(), otraCasilla.coordenadas().x()) and self.coordenadas().x() != casilla.coordenadas().x() and self.coordenadas().x() != otraCasilla.coordenadas().x()
 	method estaEntre(casilla, otraCasilla) = self.estaEntreDosEnLaMismaFila(casilla, otraCasilla) or (self.estaEntreDosEnLaMismaColumna(casilla, otraCasilla))
 	method mismaFilaOColumna(otraCasilla) = self.mismaFila(otraCasilla) or self.mismaColumna(otraCasilla)
 	
