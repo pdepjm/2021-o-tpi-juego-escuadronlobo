@@ -1,16 +1,15 @@
 import jugadores.*
 import tablero.*
 
-object turno {
-	
+object turnoManager {
+	var property jugadorActual = jugador1
+		
 	method pasarTurno(){
-		
-		
-		
+		self.jugadorActual(jugadorActual.siguiente()) 
 		self.chequearGanador()
 		// cursor.cambiarColor()
 	}
-	// asi rpite codigo, lo intente usando poli como antes, pero no me funciono. Entonces intente asi para ver q era
+	// asi repite codigo, lo intente usando poli como antes, pero no me funciono. Entonces intente asi para ver q era
 	method chequearGanador(){
 		if(jugador2.perdio()){
 			jugador1.ganar()
