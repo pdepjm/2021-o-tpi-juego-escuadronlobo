@@ -6,11 +6,17 @@ class Jugador {
 	var personajes = []
 	var property oponente = null
 	
-	method seleccionar(){
-		var personaje = cursor.personajeApuntado()
-		
-		if(personajes.contains(personaje)){ 
+	method seleccionar(){	
+		if(self.esDeJugador(cursor.personajeApuntado())){ 
 			cursor.seleccionar()
+		}
+	}
+	method realizarAtaque(n){
+		if(self.esDeJugador(cursor.personajeApuntado())){ 
+			cursor.seleccionarAtaque(n)
+		}
+		else{
+			game.say(cursor.personajeApuntado(), "Que haces bro")
 		}
 	}
 	

@@ -23,7 +23,7 @@ object teclado{
 		keyboard.right().onPressDo({ cursor.mover(derecha) })
 		keyboard.up().onPressDo({ cursor.mover(arriba) })
 		keyboard.down().onPressDo({ cursor.mover(abajo) })
-		keyboard.num(1).onPressDo({ cursor.seleccionarAtaque(1) })
+		keyboard.num(1).onPressDo({ turnoManager.jugadorActual().realizarAtaque(1) })
 		keyboard.k().onPressDo({cursor.atacar()})
 		
 	}
