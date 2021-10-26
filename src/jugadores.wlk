@@ -40,14 +40,14 @@ class Jugador {
 }
 
 object jugador1 inherits Jugador {
-	var property position = game.at(0,0)
+	var property position = game.at(-1,0)
 	var property image = "pantallaGanadoraJ1.png"
 	method siguiente() = jugador2
 
 }
 
 object jugador2 inherits Jugador {
-	var property position = game.at(0,0)
+	var property position = game.at(-1,0)
 	var property image = "pantallaGanadoraJ2.png"
 	method siguiente() = jugador1
 	
