@@ -4,26 +4,15 @@ import ataques.*
 import jugadores.*
 import nivel.*
 
-class Personaje {
-	const rangoMaximoMovimiento // De Prueba: rangoMaximoMomiento = 2
+class Unidad { // clase abstracta para personajes y edificios
 	var position
 	var property image
 	var property vida
-	const ataques = []
 	var property jugador = null
-	
-	
-	method mover(direccion){
-		position = direccion.proximaPosicion(position)
-	}
 	
 	method position() = position
 
 	method ocupaEspacio() = true
-	
-	method rangoMovimiento() = tablero.casillas().filter({ casilla => self.distanciaMenorA(casilla.position(), rangoMaximoMovimiento + 1) })
-	
-	method distanciaMenorA(casillero, distancia) = distancia < self.position().distance(casillero)
 	
 	method morir(){
 		jugador.matarPersonaje(self)
@@ -39,6 +28,20 @@ class Personaje {
 	method chequearEstado(){
 		if(vida == 0) self.morir()
 	}
+}
+
+
+class Personaje inherits Unidad {
+	const rangoMaximoMovimiento // De Prueba: rangoMaximoMomiento = 2
+	const ataques = []
+	
+	method mover(direccion){
+		position = direccion.proximaPosicion(position)
+	}
+	
+	method rangoMovimiento() = tablero.casillas().filter({ casilla => self.distanciaMenorA(casilla.position(), rangoMaximoMovimiento + 1) })
+	
+	method distanciaMenorA(casillero, distancia) = distancia < self.position().distance(casillero)
 	
 	method ataque(numero) = ataques.get(numero - 1)
 	
@@ -48,4 +51,11 @@ class Personaje {
 	}
 	
 }
-// Personajes: imagenes.
+
+
+class Edificio inherits Unidad {
+	override method morir(){
+		jugador.destruirEdificio(self)
+		game.removeVisual(self)
+	}
+}

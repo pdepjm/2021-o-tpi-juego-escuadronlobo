@@ -154,6 +154,6 @@ object configuracionBoard {
 		game.width(anchoBoard)
 	}
 	
-	method estaEnElBoard(ubicacion) = (ubicacion.x().between(0, anchoBoard-1)) && (ubicacion.y().between(0, altoBoard-2)) 
+	method estaEnElBoard(ubicacion) = (ubicacion.x().between(0, anchoBoard-2)) && (ubicacion.y().between(0, altoBoard-2)) 
 	// hacemos que no sea accesible la fila de arriba del board porque el cursor queda cortado e igual ahi iria solamente el marcador con los puntos
 }
