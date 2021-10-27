@@ -73,9 +73,9 @@ object tablero{
 	method posicionesCasillas() = casillas.map({casilla => casilla.position()})
 	
 	//casilleros que estan en la misma fila o columna que el casillero pasado como parametro, y no tienen ningun objeto en el medio de los dos.
-	method casillasAlcanzablesEnUnaLineaRecta(casilla) = casillas.filter({otroCasillero => casilla.puedeSerAlcanzadaEnUnaLineaRecta(otroCasillero)})
+	method casillasAlcanzablesEnUnaLineaRecta(casilla) = casillas.filter({otroCasillero => casilla.puedeSerAlcanzadaEnUnaLineaRecta(otroCasillero)}) // NO ANDA
 	
-	method casillasEnLaMismaFilaOColumna(casillero)= casillas.filter({otraCasilla => otraCasilla.mismaFilaOColumna(otraCasilla)})
+	method casillasEnLaMismaFilaOColumna(casillero)= casillas.filter({otraCasilla => otraCasilla.mismaFilaOColumna(casillero)}) // ANDA
 	
 	method casillerosEntre(casilla, otraCasilla) = casillas.filter({casillero => casillero.estaEntre(casilla, otraCasilla)})
 }
@@ -111,15 +111,15 @@ class Casillero{
 	method estaOcupado() =  game.getObjectsIn(self.position())!= []
 	
 	method ocupante(){
-		if (self.estaOcupado()) return game.getObjectsIn(self.position()).uniqueElement()
+		if (self.estaOcupado()) return (game.getObjectsIn(self.position()).copyWithout(cursor).uniqueElement())
 		else throw new DomainException(message = "no hay un ocupante en el casillero") // tira un error si el casillero no esta ocupado
 	}
 	
 	// PROBAR
 	method mismaFila(otraCasilla) = self.coordenadas().y() == otraCasilla.coordenadas().y()
 	method mismaColumna(otraCasilla) = self.coordenadas().x() == otraCasilla.coordenadas().x()
-	method estaEntreDosEnLaMismaColumna(casilla, otraCasilla) = self.mismaColumna(casilla) and self.mismaColumna(otraCasilla) and self.coordenadas().y().between(casilla.coordenadas().y(), otraCasilla.coordenadas().y()) and self.coordenadas().y() != casilla.coordenadas().y() and self.coordenadas().y() != otraCasilla.coordenadas().y()
-	method estaEntreDosEnLaMismaFila(casilla, otraCasilla) = self.mismaFila(casilla) and self.mismaFila(otraCasilla) and self.coordenadas().x().between(casilla.coordenadas().x(), otraCasilla.coordenadas().x()) and self.coordenadas().x() != casilla.coordenadas().x() and self.coordenadas().x() != otraCasilla.coordenadas().x()
+	method estaEntreDosEnLaMismaColumna(casilla, otraCasilla) = self.mismaColumna(casilla) and self.mismaColumna(otraCasilla) and self.coordenadas().y().between(casilla.coordenadas().y(), otraCasilla.coordenadas().y())
+	method estaEntreDosEnLaMismaFila(casilla, otraCasilla) = self.mismaFila(casilla) and self.mismaFila(otraCasilla) and self.coordenadas().x().between(casilla.coordenadas().x(), otraCasilla.coordenadas().x())
 	method estaEntre(casilla, otraCasilla) = self.estaEntreDosEnLaMismaFila(casilla, otraCasilla) or (self.estaEntreDosEnLaMismaColumna(casilla, otraCasilla))
 	method mismaFilaOColumna(otraCasilla) = self.mismaFila(otraCasilla) or self.mismaColumna(otraCasilla)
 	

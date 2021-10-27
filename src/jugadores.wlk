@@ -4,6 +4,7 @@ import tablero.*
 
 class Jugador {
 	var personajes = []
+	var edificios = []
 	var property oponente = null
 	var property turno = null
 	
@@ -36,7 +37,13 @@ class Jugador {
 		if (self.perdio()) oponente.ganar()
 	}
 	
-	method perdio() = personajes == []
+	method destruirEdificio(edificio){
+		edificios.remove(edificio)
+		if (self.perdio()) oponente.ganar()
+	}
+	
+	method perdio() = personajes == [] or edificios == []
+	
 	
 	method ganar(){
 		game.addVisual(self)

@@ -93,13 +93,22 @@ class GomeraCuradora inherits ProyectilEnArco{
 class DisparoLineaRecta inherits Ataque {
 	var rango = 2
 	var danio = 50
+	var posicionesAtacables = []
+	var ultimaPosicionAtacante = null
 	
 	override method realizarEfectoAtaque(posicion){
 		game.say(atacante, "disparo")
 		game.uniqueCollider(cursor).recibirDanio(danio)
 	}
 	
-	override method posicionesAtacables() = tablero.casillasAlcanzablesEnUnaLineaRecta(atacante.position())
+	// dejo las posiciones atacables guardadas en una variable para mejorar el rendimiento (si no se trababa)
+	override method posicionesAtacables(){
+		if (atacante.position() != ultimaPosicionAtacante){ // si cambio la posicion, actualiza las posiciones atacables
+			ultimaPosicionAtacante = atacante.position()	
+			posicionesAtacables = tablero.casillasEnLaMismaFilaOColumna(tablero.casilleroDe(atacante)).map({casillero => casillero.position()}) // en un futuro va a ser casillasAlcanzablesEnUnaLineaRecta
+			}
+		return posicionesAtacables
+	}
 }
 
 class AtaqueMele{ // clase abstracta

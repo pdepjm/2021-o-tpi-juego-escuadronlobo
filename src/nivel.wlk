@@ -9,7 +9,7 @@ import ataques.*
 import jugadores.*
 
 object configuracion{
-	const soldadoJp1 = new Personaje(rangoMaximoMovimiento = 2, image = "ally.png", position = game.at(0,7), vida = 100, ataques = [new GomeraDePiedras(), new DisparoLineaRecta()])	
+	const soldadoJp1 = new Personaje(rangoMaximoMovimiento = 2, image = "ally.png", position = game.at(0,7), vida = 100, ataques = [new DisparoLineaRecta()])	
 	const healerJp1 = new Personaje(rangoMaximoMovimiento = 2, image = "healer.png", vida = 60, ataques = [new GomeraCuradora()], position= game.at(0,6))
     const soldadoJp2 = new Personaje(rangoMaximoMovimiento = 2, image = "axis.png", position = game.at(14,7), vida = 100, ataques = [new GomeraDePiedras()])
 	const healerJp2 = new Personaje(rangoMaximoMovimiento = 2, image = "healer.png", vida = 60, ataques = [new GomeraCuradora()], position= game.at(14,6))
