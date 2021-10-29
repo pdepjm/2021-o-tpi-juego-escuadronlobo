@@ -28,7 +28,16 @@ class Jugador {
 	
 	method agregarPersonajes(listaPersonajes){
 		listaPersonajes.forEach({personaje => self.agregarPersonaje(personaje)})
+	}
+	
+	method agregarEdificio(edificio){
+		edificios.add(edificio)
+		edificio.jugador(self)
 	} 
+	
+	method agregarEdificios(listaEdificios){
+		listaEdificios.forEach({edificio => self.agregarEdificio(edificio)})
+	}
 	method esDeJugador(personaje) = personajes.contains(personaje)
 	
 	method matarPersonaje(personaje) {
