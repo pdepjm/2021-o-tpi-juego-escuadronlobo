@@ -6,20 +6,19 @@ class Jugador {
 	var personajes = []
 	var edificios = []
 	var property oponente = null
-	var property turno = null
 	
-	method seleccionar(){
-		var personaje = cursor.personajeApuntado()
-		
-		if(personajes.contains(personaje)){ 
+	method seleccionar(){	
+		if(self.esDeJugador(cursor.personajeApuntado())){ 
 			cursor.seleccionar()
 		}
 	}
-	
-	method pasarTurnoA(jugador){
-		self.turno(!turno)
-		jugador.turno(turno)
-		
+	method realizarAtaque(n){
+		if(self.esDeJugador(cursor.personajeApuntado())){ 
+			cursor.seleccionarAtaque(n)
+		}
+		else{
+			game.say(cursor.personajeApuntado(), "Que haces bro")
+		}
 	}
 	
 	method agregarPersonaje(personaje) {
@@ -54,15 +53,15 @@ class Jugador {
 }
 
 object jugador1 inherits Jugador {
-	var property position = game.at(0,0)
+	var property position = game.at(-1,0)
 	var property image = "pantallaGanadoraJ1.png"
-	override method turno() = true
+	method siguiente() = jugador2
 
 }
 
 object jugador2 inherits Jugador {
-	var property position = game.at(0,0)
+	var property position = game.at(-1,0)
 	var property image = "pantallaGanadoraJ2.png"
-	override method turno() = false
+	method siguiente() = jugador1
 	
 }
