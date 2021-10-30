@@ -36,11 +36,17 @@ class Unidad { // clase abstracta para personajes y edificios
 class Personaje inherits Unidad {
 	const rangoMaximoMovimiento // De Prueba: rangoMaximoMomiento = 2
 	const ataques = []
+	var estaEnTablero = false
+	
 	
 	method mover(direccion){
 		position = direccion.proximaPosicion(position)
 	}
 		
+	method colocarEnTablero(posicion){
+		position = posicion
+	}
+	
 	
 	method rangoMovimiento() = tablero.casillas().filter({ casilla => self.distanciaMenorA(casilla.position(), rangoMaximoMovimiento + 1) })
 	
@@ -57,6 +63,8 @@ class Personaje inherits Unidad {
 
 class Avion inherits Personaje{
 	method volarA(posicion) { position = posicion }
+	
+	//method cambiarAvion(){}
 }
 
 class Edificio inherits Unidad {
@@ -64,4 +72,5 @@ class Edificio inherits Unidad {
 		jugador.destruirEdificio(self)
 		game.removeVisual(self)
 	}
+	method curar(){}
 }
