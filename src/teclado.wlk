@@ -12,8 +12,10 @@ object teclado{
 	method teclaInicio() {keyboard.enter().onPressDo {
 		if(menuPrincipal.menuHabilitado()) { 
 				menuPrincipal.menuHabilitado(false)
-				game.removeVisual(menuPrincipal)
-				configuracion.configuracionInicial()
+				menuPrincipal.trancision()
+				game.schedule(2000,{game.removeVisual(menuPrincipal)
+				configuracion.configuracionInicial()})
+				
 		}}
 	}
 	

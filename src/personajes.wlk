@@ -38,6 +38,7 @@ class Personaje inherits Unidad {
 	method mover(direccion){
 		position = direccion.proximaPosicion(position)
 	}
+		
 	
 	method rangoMovimiento() = tablero.casillas().filter({ casilla => self.distanciaMenorA(casilla.position(), rangoMaximoMovimiento + 1) })
 	

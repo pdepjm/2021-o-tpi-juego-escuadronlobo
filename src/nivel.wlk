@@ -49,6 +49,26 @@ object menuPrincipal {
 			game.addVisual(self)
 		}
 		
+		method trancision(){
+			game.schedule(200,{=> self.image("menuPrincipal2.png")})
+			game.schedule(300,{=> self.image("menuPrincipal3.png")})
+			game.schedule(400,{=> self.image("menuPrincipal4.png")})
+			game.schedule(500,{=> self.image("menuPrincipal5.png")})
+			game.schedule(600,{=> self.image("menuPrincipal6.png")})
+			game.schedule(700,{=> self.image("menuPrincipal7.png")})
+			game.schedule(800,{=> self.image("menuPrincipal8.png")})
+			game.schedule(900,{=> self.image("menuPrincipal9.png")})
+			game.schedule(1000,{=> self.image("menuPrincipal10.png")})
+			game.schedule(1100,{=> self.image("menuPrincipal11.png")})
+			game.schedule(1200,{=> self.image("menuPrincipal12.png")})
+			game.schedule(1300,{=> self.image("menuPrincipal13.png")})
+			game.schedule(1400,{=> self.image("menuPrincipal14.png")})
+			game.schedule(1500,{=> self.image("menuPrincipal15.png")})
+			game.schedule(1600,{=> self.image("menuPrincipal16.png")})
+			game.schedule(1700,{=> self.image("menuPrincipal17.png")})
+			
+		}
+		
   		method iniciar(){
   			teclado.teclaInicio()
   		}
