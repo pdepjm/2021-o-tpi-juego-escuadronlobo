@@ -7,7 +7,7 @@ object cursor{
 	var seleccionado = null
 	var ataqueSeleccionado = ningunAtaque
 	//const ubicacionesOcupadas = #{}
-
+	
 	method image() = ataqueSeleccionado.mira()
 	method mover(direccion) {
 		position = direccion.proximaPosicion(position)
@@ -37,6 +37,8 @@ object cursor{
 	method borrarAtaqueSeleccionado() { 
 		ataqueSeleccionado = ningunAtaque
 	}
+	
+	//method cambiarCursor() = 
 	
 	// para los tests
 	method ataqueSeleccionado() = ataqueSeleccionado

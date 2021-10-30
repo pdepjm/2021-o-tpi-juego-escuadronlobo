@@ -1,5 +1,7 @@
 import wollok.game.*
 import tablero.*
+import jugadores.*
+import turnos.*
 
 object testear{
 	method inicializar(){
@@ -56,7 +58,8 @@ class Ataque{
 object ningunAtaque{
 	method marcarComoSeleccionado(_) {}
 	method realizarAtaque(_) {}
-	method mira() = "cursor.png" 
+	method mira() = turnoManager.jugadorActual().cursorJugador()
+	
 }
 
 class ProyectilEnArco inherits Ataque { // clase abstracta

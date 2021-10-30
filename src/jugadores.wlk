@@ -66,6 +66,7 @@ object jugador1 inherits Jugador {
 	var property image = "pantallaGanadoraJ1.png"
 	method siguiente() = jugador2
 	override method perdio() = personajes == [] or edificios == []
+	method cursorJugador() = "cursor.png"
 
 }
 
@@ -73,5 +74,6 @@ object jugador2 inherits Jugador {
 	var property position = game.at(-1,0)
 	var property image = "pantallaGanadoraJ2.png"
 	method siguiente() = jugador1
-	
+	method cursorJugador() = "cursor2.png"
+	override method perdio() = personajes == [] 
 }
