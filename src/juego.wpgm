@@ -11,7 +11,7 @@ program juego {
 	game.boardGround("tablero.png")
 	
 	teclado.teclasCursor()
-	teclado.teclasTurno()
+	teclado.teclasTurno()		
 	
 	menuPrincipal.mostrar()
 	menuPrincipal.iniciar()	
