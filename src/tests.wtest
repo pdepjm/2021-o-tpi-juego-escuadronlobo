@@ -8,7 +8,7 @@ import jugadores.*
 
 describe "configuracionBoard" {
 	test "ubicacion esta en el board" {
-		assert.that(configuracionBoard.estaEnElBoard(game.at(configuracionBoard.anchoBoard() - 1, configuracionBoard.altoBoard() - 2)))
+		assert.that(configuracionBoard.estaEnElBoard(game.at(configuracionBoard.anchoBoard() - 2, configuracionBoard.altoBoard() - 2)))
 	}
 	test "ubicacion no esta en el board" {
 		assert.notThat(configuracionBoard.estaEnElBoard(game.at(configuracionBoard.anchoBoard() - 1, configuracionBoard.altoBoard() - 1)))
