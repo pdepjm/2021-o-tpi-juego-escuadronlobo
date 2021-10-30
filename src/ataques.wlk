@@ -11,6 +11,8 @@ object testear{
 
 class Ataque{
 	var atacante = null
+	var posicionesAtacables = []
+	var potencia
 	
 	method miraCuandoEstaEnElRango() = "mira.png"
 	
@@ -26,8 +28,8 @@ class Ataque{
 	
 	method marcarComoSeleccionado(nuevoAtacante){
 		game.say(cursor, "ataque seleccionado")
-		
 		atacante = nuevoAtacante
+		posicionesAtacables = self.posicionesAtacables() // guardo esto para mejorar el rendimiento
 //		tablero.pintarCasillerosEn(self.posicionesAtacables())
 	}
 	
@@ -37,6 +39,7 @@ class Ataque{
 			self.borrarAtacanteSeleccionado()
 			cursor.borrarAtaqueSeleccionado()
 			tablero.despintarCasillerosAtaque()
+			posicionesAtacables = []
 			}
 		else (game.say(cursor, "no se puede atacar esta ubicación"))
 	}
@@ -45,7 +48,7 @@ class Ataque{
 		atacante = null
 	}
 	
-	method esAtacable(posicion) = self.posicionesAtacables().contains(posicion)
+	method esAtacable(posicion) = posicionesAtacables.contains(posicion)
 	
 	// para testear
 	method atacante() = atacante
@@ -60,7 +63,7 @@ object ningunAtaque{
 }
 
 class ProyectilEnArco inherits Ataque { // clase abstracta
-	var rangoMaximo = 3
+	var rangoMaximo
 	
 	// TODO: esto no es responsabilidad del ataque, ponerlo en otro lado?
 	override method posicionesAtacables() = tablero.posicionesCasillas().filter({ posicion => self.distanciaMenorA(posicion, rangoMaximo + 1) })
@@ -72,46 +75,57 @@ class ProyectilEnArco inherits Ataque { // clase abstracta
 }
 
 class GomeraDePiedras inherits ProyectilEnArco{
-	var danio = 30
-		
+
 	override method realizarEfectoAtaque(posicion){
 		game.say(atacante, "pium pium")
-		game.uniqueCollider(cursor).recibirDanio(danio)
+		game.uniqueCollider(cursor).recibirDanio(potencia)
 	}
 	//para testear
-	method danio() = danio
+	method potencia() = potencia
 }
 
 class GomeraCuradora inherits ProyectilEnArco{
-	var curacion = 30
 	
 	override method realizarEfectoAtaque(posicion){
 		game.say(atacante, "te curo amigo")
-		game.uniqueCollider(cursor).curar(curacion)
+		game.uniqueCollider(cursor).curar(potencia)
 	}
 	// para testear
-	method curacion() = curacion
+	method potencia() = potencia
 }
 
-class DisparoLineaRecta inherits Ataque {
-	var rango = 2
-	var danio = 50
-	var posicionesAtacables = []
+class LineaRecta inherits Ataque {
 	var ultimaPosicionAtacante = null
 	
+	override method posicionesAtacables() = tablero.casillasEnLaMismaFilaOColumna(tablero.casilleroDe(atacante)).map({casillero => casillero.position()}) // en un futuro va a ser casillasAlcanzablesEnUnaLineaRecta
+	// dejo las posiciones atacables guardadas en una variable para mejorar el rendimiento (si no se trababa)
+}
+
+class Rifle inherits LineaRecta{
 	override method realizarEfectoAtaque(posicion){
 		game.say(atacante, "disparo")
-		game.uniqueCollider(cursor).recibirDanio(danio)
+		game.uniqueCollider(cursor).recibirDanio(potencia)
+	}
+}
+
+class Bombardeo inherits LineaRecta{
+	
+	override method realizarEfectoAtaque(posicion){
+		const casillerosAtacados = tablero.casillerosEntre(tablero.casillero(posicion), tablero.casilleroDe(atacante))
+		atacante.volarA(posicion)
+		casillerosAtacados.forEach({atacado => self.pasarArribaDe(atacado)})
 	}
 	
-	// dejo las posiciones atacables guardadas en una variable para mejorar el rendimiento (si no se trababa)
-	override method posicionesAtacables(){
-		if (atacante.position() != ultimaPosicionAtacante){ // si cambio la posicion, actualiza las posiciones atacables
-			ultimaPosicionAtacante = atacante.position()	
-			posicionesAtacables = tablero.casillasEnLaMismaFilaOColumna(tablero.casilleroDe(atacante)).map({casillero => casillero.position()}) // en un futuro va a ser casillasAlcanzablesEnUnaLineaRecta
+	method pasarArribaDe(casillero){
+		if (casillero.estaOcupado()){
+			const ocupanteCasillero = casillero.ocupante()
+			if (!ocupanteCasillero.esAliado(atacante)){
+			ocupanteCasillero.recibirDanio(potencia)
 			}
-		return posicionesAtacables
+		}
 	}
+	
+	override method posicionesAtacables() = tablero.casillasEnLaMismaFilaOColumna(tablero.casilleroDe(atacante)).filter({casillero => not casillero.estaOcupado()}).map({casillero => casillero.position()})
 }
 
 class AtaqueMele{ // clase abstracta

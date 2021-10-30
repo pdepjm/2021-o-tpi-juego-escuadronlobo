@@ -50,7 +50,7 @@ class Jugador {
 		if (self.perdio()) oponente.ganar()
 	}
 	
-	method perdio() = personajes == [] or edificios == []
+	method perdio() = personajes == []
 	
 	
 	method ganar(){
@@ -65,6 +65,7 @@ object jugador1 inherits Jugador {
 	var property position = game.at(-1,0)
 	var property image = "pantallaGanadoraJ1.png"
 	method siguiente() = jugador2
+	override method perdio() = personajes == [] or edificios == []
 	method cursorJugador() = "cursor.png"
 
 }

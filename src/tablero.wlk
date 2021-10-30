@@ -24,6 +24,7 @@ object cursor{
 	method personajeApuntado(){ return game.uniqueCollider(self)}
 	
 	method seleccionarAtaque(n){
+		seleccionado = null
 		ataqueSeleccionado = self.personajeApuntado().ataque(n)
 		ataqueSeleccionado.marcarComoSeleccionado(self.personajeApuntado())
 	}
@@ -52,9 +53,10 @@ object tablero{
 	const casillas = []
 	method casillas() = casillas
 	
-	method casilleroDe(personaje) = casillas.find({ casillero => casillero.estaOcupado() and (casillero.ocupante() == personaje) })
+	method casilleroDe(personaje) = casillas.find({ casillero => casillero.ocupadoPor(personaje) })
 		
 	method casillero(x, y) = casillas.find({casillero => casillero.coordenadas().x() == x && casillero.coordenadas().y() == y})
+	method casillero(position) = casillas.find({casillero => casillero.position() == position})
 	
 	method crearFila(n) { tamanioHorizontal.times({i => casillas.add(new Casillero(coordenadas = new Coordenadas(x = i, y = n)))}) }
 	method crearCasillas() { tamanioVertical.times({i => self.crearFila(i)}) }
@@ -110,19 +112,23 @@ class Casillero{
 		game.removeVisual(circuloVerde)
 	}
 	
-	method estaOcupado() =  game.getObjectsIn(self.position())!= []
-	
+	method estaOcupado() =  game.getObjectsIn(self.position()).copyWithout(cursor).size() >= 1
+		
 	method ocupante(){
-		if (self.estaOcupado()) return (game.getObjectsIn(self.position()).copyWithout(cursor).uniqueElement())
-		else throw new DomainException(message = "no hay un ocupante en el casillero") // tira un error si el casillero no esta ocupado
+		if (not self.estaOcupado()) {throw new DomainException(message = "no hay un ocupante en el casillero")} // tira un error si el casillero no esta ocupado
+		return (game.getObjectsIn(self.position()).copyWithout(cursor).uniqueElement())
+	}
+	method ocupadoPor(ocupante){
+		if (self.estaOcupado()) {return self.ocupante() == ocupante}
+		else return false
 	}
 	
 	// PROBAR
 	method mismaFila(otraCasilla) = self.coordenadas().y() == otraCasilla.coordenadas().y()
 	method mismaColumna(otraCasilla) = self.coordenadas().x() == otraCasilla.coordenadas().x()
-	method estaEntreDosEnLaMismaColumna(casilla, otraCasilla) = self.mismaColumna(casilla) and self.mismaColumna(otraCasilla) and self.coordenadas().y().between(casilla.coordenadas().y(), otraCasilla.coordenadas().y())
-	method estaEntreDosEnLaMismaFila(casilla, otraCasilla) = self.mismaFila(casilla) and self.mismaFila(otraCasilla) and self.coordenadas().x().between(casilla.coordenadas().x(), otraCasilla.coordenadas().x())
-	method estaEntre(casilla, otraCasilla) = self.estaEntreDosEnLaMismaFila(casilla, otraCasilla) or (self.estaEntreDosEnLaMismaColumna(casilla, otraCasilla))
+	method estaEntreDosEnLaMismaColumna(casilla, otraCasilla) = self.mismaColumna(casilla) and self.mismaColumna(otraCasilla) and self.coordenadas().coordYEntre(casilla.coordenadas(), otraCasilla.coordenadas())
+	method estaEntreDosEnLaMismaFila(casilla, otraCasilla) = self.mismaFila(casilla) and self.mismaFila(otraCasilla) and self.coordenadas().coordXEntre(casilla.coordenadas(), otraCasilla.coordenadas())
+	method estaEntre(casilla, otraCasilla) = self.estaEntreDosEnLaMismaColumna(casilla, otraCasilla) or self.estaEntreDosEnLaMismaFila(casilla, otraCasilla)
 	method mismaFilaOColumna(otraCasilla) = self.mismaFila(otraCasilla) or self.mismaColumna(otraCasilla)
 	
 	//se cumple si las dos casillas
@@ -132,6 +138,9 @@ class Casillero{
 class Coordenadas{
 	var property x = 0
 	var property y = 0
+	
+	method coordXEntre(coordenadas1, coordenadas2) = x.between(coordenadas1.x(), coordenadas2.x()) or x.between(coordenadas2.x(), coordenadas1.x())
+	method coordYEntre(coordenadas1, coordenadas2) = y.between(coordenadas1.y(), coordenadas2.y()) or y.between(coordenadas2.y(), coordenadas1.y())
 	
 	// hace que se pueda mostrar en consola	
 	override method toString(){

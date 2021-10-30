@@ -28,6 +28,8 @@ class Unidad { // clase abstracta para personajes y edificios
 	method chequearEstado(){
 		if(vida == 0) self.morir()
 	}
+	
+	method esAliado(unidad) = jugador == unidad.jugador()
 }
 
 
@@ -53,6 +55,9 @@ class Personaje inherits Unidad {
 	
 }
 
+class Avion inherits Personaje{
+	method volarA(posicion) { position = posicion }
+}
 
 class Edificio inherits Unidad {
 	override method morir(){
