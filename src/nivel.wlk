@@ -87,6 +87,7 @@ object menuPrincipal inherits Pantalla (image = "menuPrincipal.png") {
 			})
 		}	
 		method trancisionFinal(){
+			game.removeTickEvent("parpadear") 
 			game.schedule(200,{=> self.image("menuPrincipal2.png")})
 			game.schedule(250,{=> self.image("menuPrincipal3.png")})
 			game.schedule(300,{=> self.image("menuPrincipal4.png")})
