@@ -5,6 +5,7 @@ import direcciones.*
 import personajes.*
 import ataques.*
 import jugadores.*
+import turnos.*
 
 describe "configuracionBoard" {
 	test "ubicacion esta en el board" {
@@ -209,5 +210,62 @@ describe "tablero"{
 		assert.equals(tablero.casillero(3,5), tablero.casilleroDe(josesito))
 		game.removeVisual(cursor)
 	}
+}
+
+describe "turnos"{
+	const soldadoJp1 = new Personaje(rangoMaximoMovimiento = 2, image = "ally.png", position = game.at(4,7), vida = 100, ataques = [new Rifle(potencia = 1, rangoMaximo = 99)])
+	const healerJp1 = new Personaje(rangoMaximoMovimiento = 2, image = "healer.png", vida = 60, ataques = [new GomeraCuradora(potencia = 1, rangoMaximo = 2)], position= game.at(4,6))	
+	const avionJp1 = new Avion(rangoMaximoMovimiento = 2, image = "avion1.png", position = game.at(4,5), vida = 100, ataques = [new Bombardeo(potencia = 1)])	
+	
+	method atacarCon(atacante){
+		cursor.position(atacante.position())
+		turnoManager.atacarConJugadorActual(1)
+		cursor.position(avionJp1.position())
+		cursor.atacar()
+	}
+	
+	method moverALaMismaPosicion(personaje){
+		cursor.position(personaje)
+		cursor.seleccionar() // selecciona
+		cursor.seleccionar() // desselecciona
+	}
+	
+//	method initalize(){
+//		game.clear()
+//		tablero.configurarCasillas()
+//		game.addVisual(soldadoJp1)
+//		game.addVisual(healerJp1)
+//		game.addVisual(avionJp1)
+//		game.addVisual(cursor)
+//		turnoManager.turno(new Turno(jugador = jugador1, movimientosMaximos = 2, ataquesMaximos = 2))
+//	}
+	
+//	test "se pasa de turno al llegar al maximo de ataques y movimientos"{
+//		game.clear()
+//		tablero.configurarCasillas()
+//		game.addVisual(soldadoJp1)
+//		game.addVisual(healerJp1)
+//		game.addVisual(avionJp1)
+//		game.addVisual(cursor)
+//		turnoManager.turno(new Turno(jugador = jugador1, movimientosMaximos = 2, ataquesMaximos = 2))
+//		self.atacarCon(soldadoJp1)
+//		self.atacarCon(healerJp1)
+//		self.moverALaMismaPosicion(soldadoJp1)
+//		self.moverALaMismaPosicion(healerJp1)
+//		turnoManager.atacarConJugadorActual(1)
+//		assert.equals(turnoManager.jugadorActual(), jugador2)
+//	}
+//	test "no te deja atacar si alcanzaste el máximo de ataques"{
+//		
+//	}
+//	test "no te deja atacar si ya atacaste con esa unidad"{
+//		
+//	}
+//	test "no te deja mover si llegaste al maximo de movimientos"{
+//		
+//	}
+//	test "no te deja mover si ya moviste esa unidad"{
+//		
+//	}
 }
 

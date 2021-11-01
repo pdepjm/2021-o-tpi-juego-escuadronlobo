@@ -1,6 +1,7 @@
 import wollok.game.*
 import direcciones.*
 import ataques.*
+import turnos.*
 
 object cursor{
 	var property position = game.at(0,7)
@@ -9,21 +10,42 @@ object cursor{
 	//const ubicacionesOcupadas = #{}
 	
 	method image() = ataqueSeleccionado.mira()
+	method seleccionado() = seleccionado
 	method mover(direccion) {
 		position = direccion.proximaPosicion(position)
-		if (seleccionado != null && ataqueSeleccionado == ningunAtaque) seleccionado.mover(direccion) 
+		if (seleccionado != null) seleccionado.mover(direccion) 
 	}
-	
-	method ubicacionOcupada(){ game.colliders(self).any({visual => visual.ocupaEspacio()}) }
+	method ubicacionOcupada() = game.colliders(self).size() > 0
+	method personajeApuntado(){ return game.uniqueCollider(self)}
 
 	method seleccionar(){
-		if (seleccionado == null) { seleccionado = self.personajeApuntado() } // uniqueCollider: Returns the unique object that is in same position of given object.
-		else seleccionado = null
+		if (ataqueSeleccionado == ningunAtaque){
+			if (seleccionado == null) { 
+				turnoManager.intentarAgarrarPersonaje()
+			}
+			else {
+				self.intentarSoltarPersonaje()
+			}
+		}
 	}
 	
-	method personajeApuntado(){ return game.uniqueCollider(self)}
+	method seleccionarPersonaje(){
+		seleccionado = self.personajeApuntado()
+		seleccionado.marcarComoPersonajeSeleccionado()
+	}
+	method intentarSoltarPersonaje(){
+		if (seleccionado.puedeMoverseA(self.position())){
+			self.borrarPersonajeSeleccionado()
+			turnoManager.chequearFinDeTurno()			
+		}
+		else{
+			game.say(seleccionado, "no me puedo mover ahí")
+		}
+	}
+	method borrarPersonajeSeleccionado(){seleccionado = null}
 	
 	method seleccionarAtaque(n){
+		if (seleccionado != null) {self.intentarSoltarPersonaje()}
 		seleccionado = null
 		ataqueSeleccionado = self.personajeApuntado().ataque(n)
 		ataqueSeleccionado.marcarComoSeleccionado(self.personajeApuntado())
@@ -57,6 +79,7 @@ object tablero{
 		
 	method casillero(x, y) = casillas.find({casillero => casillero.coordenadas().x() == x && casillero.coordenadas().y() == y})
 	method casillero(position) = casillas.find({casillero => casillero.position() == position})
+	method estaEnElTablero(position) = casillas.any({casillero => casillero.position() == position})
 	
 	method crearFila(n) { tamanioHorizontal.times({i => casillas.add(new Casillero(coordenadas = new Coordenadas(x = i, y = n)))}) }
 	method crearCasillas() { tamanioVertical.times({i => self.crearFila(i)}) }
@@ -123,7 +146,6 @@ class Casillero{
 		else return false
 	}
 	
-	// PROBAR
 	method mismaFila(otraCasilla) = self.coordenadas().y() == otraCasilla.coordenadas().y()
 	method mismaColumna(otraCasilla) = self.coordenadas().x() == otraCasilla.coordenadas().x()
 	method estaEntreDosEnLaMismaColumna(casilla, otraCasilla) = self.mismaColumna(casilla) and self.mismaColumna(otraCasilla) and self.coordenadas().coordYEntre(casilla.coordenadas(), otraCasilla.coordenadas())
@@ -131,7 +153,7 @@ class Casillero{
 	method estaEntre(casilla, otraCasilla) = self.estaEntreDosEnLaMismaColumna(casilla, otraCasilla) or self.estaEntreDosEnLaMismaFila(casilla, otraCasilla)
 	method mismaFilaOColumna(otraCasilla) = self.mismaFila(otraCasilla) or self.mismaColumna(otraCasilla)
 	
-	//se cumple si las dos casillas
+	// NO ANDA
 	method puedeSerAlcanzadaEnUnaLineaRecta(otraCasilla) = self.mismaFilaOColumna(otraCasilla) and tablero.casillerosEntre(self, otraCasilla).all({casilla => !casilla.estaOcupado()})
 }
 

@@ -4,6 +4,7 @@ import ataques.*
 import jugadores.*
 import nivel.*
 import turnos.*
+import rangos.*
 
 class Unidad { // clase abstracta para personajes y edificios
 	var position
@@ -37,21 +38,23 @@ class Unidad { // clase abstracta para personajes y edificios
 class Personaje inherits Unidad {
 	const rangoMaximoMovimiento // De Prueba: rangoMaximoMomiento = 2
 	const ataques = []
-	var estaEnTablero = false
-	
+	var property rango = null
 	
 	method mover(direccion){
 		position = direccion.proximaPosicion(position)
 	}
-		
-	method colocarEnTablero(posicion){
-		position = posicion
+	
+	method marcarComoPersonajeSeleccionado(){
+		self.actualizarRango()
 	}
-	
-	
-	method rangoMovimiento() = tablero.casillas().filter({ casilla => self.distanciaMenorA(casilla.position(), rangoMaximoMovimiento + 1) })
-	
-	method distanciaMenorA(casillero, distancia) = distancia < self.position().distance(casillero)
+	method puedeMoverseA(posicion){
+		return rango.estaEnElRango(posicion) and (game.colliders(self).copyWithout(cursor).isEmpty())
+	}
+	method actualizarRango(){
+		if (tablero.estaEnElTablero(self.position())){
+			rango = new RangoCuadrado(posicionBase = self.position(), rangoMaximo = rangoMaximoMovimiento) 		
+		}
+	}
 	
 	method ataque(numero) = ataques.get(numero - 1)
 	
@@ -92,5 +95,7 @@ class Edificio inherits Unidad {
 		jugador.destruirEdificio(self)
 		game.removeVisual(self)
 	}
-	method curar(){}
+	method curar(_){
+		game.say(self, "No me puedo curar")
+	}
 }

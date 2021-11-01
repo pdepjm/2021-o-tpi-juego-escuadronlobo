@@ -2,6 +2,7 @@ import wollok.game.*
 import tablero.*
 import jugadores.*
 import turnos.*
+import rangos.*
 
 object testear{
 	method inicializar(){
@@ -9,6 +10,7 @@ object testear{
 	}
 }
 
+// Los ataques obtienen su rango por composición y su efecto por herencia
 class Ataque{
 	var atacante = null
 	var posicionesAtacables = []
@@ -21,16 +23,14 @@ class Ataque{
 		else return "prohibido.png"
 	}
 	
+	method posicionesAtacables() = self.rango().posiciones() // son objetos POSITION
 	// para redefinir en cada clase heredera
-	method posicionesAtacables() = tablero.casillas().map({casilla => casilla.position()}) // son objetos POSITION
+	method rango() = rangoIlimitado
 	method realizarEfectoAtaque(_) {}
-	method objetivosMaximos() = 1
 	
 	method marcarComoSeleccionado(nuevoAtacante){
-		game.say(cursor, "ataque seleccionado")
 		atacante = nuevoAtacante
 		posicionesAtacables = self.posicionesAtacables() // guardo esto para mejorar el rendimiento
-//		tablero.pintarCasillerosEn(self.posicionesAtacables())
 	}
 	
 	method realizarAtaque(posicion){
@@ -53,63 +53,67 @@ class Ataque{
 	// para testear
 	method atacante() = atacante
 	method atacante(nuevo) {atacante = nuevo}
+	method potencia() = potencia
 }
+
 
 object ningunAtaque{
 	method marcarComoSeleccionado(_) {}
 	method realizarAtaque(_) {}
-	method mira() = turnoManager.jugadorActual().cursorJugador()
-	
-}
-
-class ProyectilEnArco inherits Ataque { // clase abstracta
-	var rangoMaximo
-	
-	// TODO: esto no es responsabilidad del ataque, ponerlo en otro lado?
-	override method posicionesAtacables() = tablero.posicionesCasillas().filter({ posicion => self.distanciaMenorA(posicion, rangoMaximo + 1) })
-	method distanciaX(posicion) = (atacante.position().x() - posicion.x()).abs()
-	method distanciaY(posicion) = (atacante.position().y() - posicion.y()).abs()
-	method distanciaXMenorA(posicion, distancia) = self.distanciaX(posicion) < distancia
-	method distanciaYMenorA(posicion, distancia) = self.distanciaY(posicion) < distancia
-	method distanciaMenorA(posicion, distancia) = self.distanciaXMenorA(posicion, distancia) && self.distanciaYMenorA(posicion, distancia)
-}
-
-class GomeraDePiedras inherits ProyectilEnArco{
-
-	override method realizarEfectoAtaque(posicion){
-		game.say(atacante, "pium pium")
-		game.uniqueCollider(cursor).recibirDanio(potencia)
-	}
-	//para testear
-	method potencia() = potencia
-}
-
-class GomeraCuradora inherits ProyectilEnArco{
-	
-	override method realizarEfectoAtaque(posicion){
-		game.say(atacante, "te curo amigo")
-		game.uniqueCollider(cursor).curar(potencia)
-	}
-	// para testear
-	method potencia() = potencia
-}
-
-class LineaRecta inherits Ataque {
-	var ultimaPosicionAtacante = null
-	
-	override method posicionesAtacables() = tablero.casillasEnLaMismaFilaOColumna(tablero.casilleroDe(atacante)).map({casillero => casillero.position()}) // en un futuro va a ser casillasAlcanzablesEnUnaLineaRecta
-	// dejo las posiciones atacables guardadas en una variable para mejorar el rendimiento (si no se trababa)
-}
-
-class Rifle inherits LineaRecta{
-	override method realizarEfectoAtaque(posicion){
-		game.say(atacante, "disparo")
-		game.uniqueCollider(cursor).recibirDanio(potencia)
+	method mira(){ // TODO: cambiar esto por algo más lindo? modoAtaque y modoMover del cursor con composición?
+		if (cursor.seleccionado() == null){
+		return turnoManager.jugadorActual().cursorJugador()
+		}
+		if (cursor.seleccionado().puedeMoverseA(cursor.position())){
+		return turnoManager.jugadorActual().cursorJugador()
+		}
+		else return "prohibido.png"
 	}
 }
 
-class Bombardeo inherits LineaRecta{
-	
+class PegaEnUnaCasilla inherits Ataque{
+	override method realizarEfectoAtaque(posicion){
+		if (cursor.ubicacionOcupada()) {
+			game.say(atacante, "pium pium")
+			cursor.personajeApuntado().recibirDanio(potencia)
+		}
+		else{
+			game.say(atacante, "le erré :(")
+		}
+	}
+}
+
+class CuraEnUnaCasilla inherits Ataque{
+	override method realizarEfectoAtaque(posicion){
+		if (cursor.ubicacionOcupada()) {
+			game.say(atacante, "te curo amigo")
+			cursor.personajeApuntado().curar(potencia)
+		}
+		else{
+			game.say(atacante, "no curé a nadie :(")
+		}
+	}
+}
+
+class GomeraDePiedras inherits PegaEnUnaCasilla{
+	const rangoMaximo
+	override method rango() = new RangoCuadrado(posicionBase = atacante.position(), rangoMaximo = rangoMaximo)
+}
+
+class GomeraCuradora inherits CuraEnUnaCasilla{
+	const rangoMaximo
+	override method rango() = new RangoCuadrado(posicionBase = atacante.position(), rangoMaximo = rangoMaximo)
+}
+
+class Rifle inherits PegaEnUnaCasilla{
+	const rangoMaximo
+	override method rango() = new RangoLineaRecta(posicionBase = atacante.position(), rangoMaximo = rangoMaximo)
+}
+
+
+// TODO: hacer que use composición y herencia como los otros ataques
+class Bombardeo inherits Ataque{
+		
 	override method realizarEfectoAtaque(posicion){
 		const casillerosAtacados = tablero.casillerosEntre(tablero.casillero(posicion), tablero.casilleroDe(atacante))
 		atacante.volarA(posicion)
@@ -132,18 +136,6 @@ class AtaqueMele{ // clase abstracta
 	
 }
 
-class AtaqueCuchillo inherits AtaqueMele {
-	var rango = 1
-	var danioBase = 1
-	
-	method lanzarAtaque(ubicacion) {
-//		cursor.seleccionarAtaque(self)
-	}
-	method hacerDanio(ubicacion){
-		game.colliders(self).forEach({personaje => personaje.hacerDanio(danioBase)})
-	}
-}
-
 class Mina{ // una mina que se deposita en un casillero y se activa cuando la pisan
 	
 }
@@ -152,7 +144,7 @@ class DisparoMultiple{
 	
 }
 
-class Granada inherits ProyectilEnArco {
+class Granada inherits Ataque {
 	var radioExplosion = 3 // debe ser un numero impar para que pueda tener un centro
 	method disminucionPotencia(distancia) = distancia * 1 //disminución de la potencia por cada unidad de distancia que nos alejamos del centro 
 	 
