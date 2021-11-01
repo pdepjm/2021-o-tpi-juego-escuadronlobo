@@ -1,15 +1,22 @@
 import wollok.game.*
 import tablero.*
-
+import turnos.*
+import rangos.*
 
 class Jugador {
 	var personajes = []
 	var edificios = []
 	var property oponente = null
+	const rangoDeDespliegueDeUnidades = rangoIlimitado
 	
-	method seleccionar(){	
-		if(self.esDeJugador(cursor.personajeApuntado())){ 
-			cursor.seleccionar()
+	method seleccionarParaMover(){
+		const personaje = cursor.personajeApuntado()
+		if(self.esDeJugador(personaje)){
+			cursor.seleccionarPersonaje()
+			turnoManager.agregarMovido(cursor.personajeApuntado())
+		}
+		else{
+			game.say(cursor.personajeApuntado(), "No soy de los tuyos")
 		}
 	}
 	method realizarAtaque(n){
@@ -24,6 +31,7 @@ class Jugador {
 	method agregarPersonaje(personaje) {
 		personajes.add(personaje)
 		personaje.jugador(self)
+		personaje.rango(rangoDeDespliegueDeUnidades)
 	}
 	
 	method agregarPersonajes(listaPersonajes){

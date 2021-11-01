@@ -10,10 +10,10 @@ import jugadores.*
 
 object configuracion{
 	// Cambiar voluntad los rangos y potencias de las instancias de los ataques para balancear el juego
-	const soldadoJp1 = new Personaje(rangoMaximoMovimiento = 2, image = "ally.png", position = game.at(0,7), vida = 100, ataques = [new Rifle(potencia = 50)])
+	const soldadoJp1 = new Personaje(rangoMaximoMovimiento = 2, image = "ally.png", position = game.at(0,7), vida = 100, ataques = [new Rifle(potencia = 50, rangoMaximo = 4)])
 	const avionJp1 = new Avion(rangoMaximoMovimiento = 2, image = "avion1.png", position = game.at(0,5), vida = 100, ataques = [new Bombardeo(potencia = 30)])	
 	const healerJp1 = new Personaje(rangoMaximoMovimiento = 2, image = "healer.png", vida = 60, ataques = [new GomeraCuradora(potencia = 50, rangoMaximo = 2)], position= game.at(0,6))
-    const soldadoJp2 = new Personaje(rangoMaximoMovimiento = 2, image = "axis.png", position = game.at(13,7), vida = 100, ataques = [new Rifle(potencia = 50)])
+    const soldadoJp2 = new Personaje(rangoMaximoMovimiento = 2, image = "axis.png", position = game.at(13,7), vida = 100, ataques = [new Rifle(potencia = 50, rangoMaximo = 4)])
 	const healerJp2 = new Personaje(rangoMaximoMovimiento = 2, image = "healer2.png", vida = 60, ataques = [new GomeraCuradora(potencia = 50, rangoMaximo = 2)], position= game.at(13,6))
 	const edificio1 = new Edificio(position = game.at(3,7), image = "edificio1.png", vida = 600)
 	const edificio2 = new Edificio(position = game.at(5,4), image = "edificio1.png", vida = 600)
