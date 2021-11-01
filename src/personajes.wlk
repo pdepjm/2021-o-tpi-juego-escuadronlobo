@@ -3,6 +3,7 @@ import tablero.*
 import ataques.*
 import jugadores.*
 import nivel.*
+import turnos.*
 import rangos.*
 
 class Unidad { // clase abstracta para personajes y edificios
@@ -67,8 +68,27 @@ class Personaje inherits Unidad {
 class Avion inherits Personaje{
 	method volarA(posicion) { position = posicion }
 	
-	//method cambiarAvion(){}
+	override method mover(direccion){
+		position = direccion.proximaPosicion(position)
+		direccion.orientar(self)
+	}
+	
+	method mirarDerecha() {
+		self.image(jugador.avionDerecha())
+	}
+	method mirarIzquierda() {
+		self.image(jugador.avionIzquierda())
+	}
+	method mirarAbajo() {
+		self.image(jugador.avionAbajo())
+	}
+	method mirarArriba() {
+		self.image(jugador.avionArriba())
+	}
+	
+	
 }
+
 
 class Edificio inherits Unidad {
 	override method morir(){
