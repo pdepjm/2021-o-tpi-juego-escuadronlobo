@@ -100,7 +100,7 @@ class CuraEnUnaCasilla inherits Ataque{
 
 class GomeraDePiedras inherits PegaEnUnaCasilla{
 	const rangoMaximo
-	override method actualizarRango() { rango = new RangoCuadrado(posicionBase = atacante.position(), rangoMaximo = rangoMaximo)}
+	override method actualizarRango() { rango = new RangoCuadrado(posicionBase = atacante.position(), rangoMaximo = rangoMaximo) }
 }
 
 class GomeraCuradora inherits CuraEnUnaCasilla{
