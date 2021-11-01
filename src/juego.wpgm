@@ -11,6 +11,7 @@ program juego {
 	game.boardGround("tablero.png")		
 	
 	menuPrincipal.mostrar()
+	menuPrincipal.animacion()
 	menuPrincipal.iniciar()	
 	
 	game.start()

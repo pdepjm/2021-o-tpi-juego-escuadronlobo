@@ -10,7 +10,8 @@ import jugadores.*
 object teclado{
 	
 	method teclaInicio(pantalla) {keyboard.enter().onPressDo {
-		if(pantalla.habilitado()) { 
+		if(pantalla.habilitado()) {
+				game.removeTickEvent("parpadear") 
 				pantalla.habilitado(false)
 				pantalla.trancisionFinal()
 				game.schedule(1200,{

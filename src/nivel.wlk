@@ -78,7 +78,14 @@ class Pantalla {
 object menuPrincipal inherits Pantalla (image = "menuPrincipal.png") {
 		
 		method siguiente() = controles	
-			
+		method animacion(){
+			game.schedule(200,{=> self.image("menuPrincipal.png")})
+			game.schedule(800,{=> self.image("menuPrincipalA.png")})
+			game.onTick(1200,"parpadear",{
+				game.schedule(200,{=> self.image("menuPrincipal.png")})
+				game.schedule(800,{=> self.image("menuPrincipalA.png")})
+			})
+		}	
 		method trancisionFinal(){
 			game.schedule(200,{=> self.image("menuPrincipal2.png")})
 			game.schedule(250,{=> self.image("menuPrincipal3.png")})
