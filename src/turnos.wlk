@@ -51,6 +51,8 @@ object turnoManager {
 
 	method puedeMover(personaje) = turno.noMovio(personaje)
 	method puedeAtacar(personaje) = turno.noAtaco(personaje)
+	method movidasRestantes() = turno.movidasRestantes()
+	method ataquesRestantes() = turno.ataquesRestantes()
 	
 	// asi repite codigo, lo intente usando poli como antes, pero no me funciono. Entonces intente asi para ver q era
 	method chequearGanador(){
@@ -79,11 +81,16 @@ class Turno{
 	method noAtaco(atacante) = not personajesQueAtacaron.contains(atacante)
 	method noMovio(movido) = not personajesMovidos.contains(movido)
 	method movioTodosLosQueTiene() = (personajesMovidos.asSet() == jugador.personajes().asSet())
-	method maximoDeAtaquesAlcanzado() = personajesQueAtacaron.size() >= ataquesMaximos
-	method maximoDeMovidasAlcanzado() = personajesMovidos.size() >= movimientosMaximos or self.movioTodosLosQueTiene()
+	method maximoDeAtaquesAlcanzado() = self.ataquesRealizados() >= ataquesMaximos
+	method maximoDeMovidasAlcanzado() = self.movidasRealizadas() >= movimientosMaximos or self.movioTodosLosQueTiene()
 	method noSePuedeHacerMasNadaEsteTurno() = self.maximoDeAtaquesAlcanzado() and self.maximoDeMovidasAlcanzado()
+	
 //	method terminarTurno(){ // si los personajes también contaran las acciones que hicieron
 //		personajesMovidos.forEach({personaje => personaje.resetearMovimientosTurno()})
 //		personajesQueAtacaron.forEach({personaje => personaje.resetearAtaquesTurno()})
 //	}
+	
+	// PARA MOSTRAR EN EL TABLERO
+	method movidasRestantes() = movimientosMaximos.min(jugador.personajes().size()) - self.movidasRealizadas()
+	method ataquesRestantes() = ataquesMaximos.min(jugador.personajes().size()) - self.ataquesRealizados()
 }

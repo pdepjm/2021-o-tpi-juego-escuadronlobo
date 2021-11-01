@@ -107,33 +107,12 @@ object tablero{
 	method casillerosEntre(casilla, otraCasilla) = casillas.filter({casillero => casillero.estaEntre(casilla, otraCasilla)})
 }
 
-class CirculoVerde {
-	var property image = "CirculoVerde.png"
-	var property position
-	method mostrar() = game.addVisual(self)  
-} 
-
 class Casillero{
 	const coordenadas = new Coordenadas()
-	var habilitado = true
-	var circuloVerde = null
 	
 	method coordenadas() = coordenadas
 	
 	method position() = game.at(coordenadas.x() + 2, coordenadas.y())
-	
-	method habilitado() = habilitado
-	method deshabilitar() {habilitado = false}
-	method habilitar() {habilitado = true}
-	
-	method pintar(){
-		circuloVerde = new CirculoVerde(position = self.position())
-		circuloVerde.mostrar()
-	}
-	
-	method despintar(){
-		game.removeVisual(circuloVerde)
-	}
 	
 	method estaOcupado() =  game.getObjectsIn(self.position()).copyWithout(cursor).size() >= 1
 		
@@ -167,12 +146,6 @@ class Coordenadas{
 	// hace que se pueda mostrar en consola	
 	override method toString(){
 		return "(" + x.toString() + "," + y.toString() + ")"
-	}
-}
-
-object efectos{
-	method explosion(ubicacion){
-		// animacion explosion
 	}
 }
 

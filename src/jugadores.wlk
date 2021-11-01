@@ -7,7 +7,7 @@ class Jugador {
 	var personajes = []
 	var edificios = []
 	var property oponente = null
-	const rangoDeDespliegueDeUnidades = rangoIlimitado
+	const rangoDeDespliegueDeUnidades = rangoIlimitado // TODO: que se puedan desplegar solo en las dos primeras columnas de su lado (o algo así)
 	
 	method seleccionarParaMover(){
 		const personaje = cursor.personajeApuntado()
