@@ -75,5 +75,7 @@ class Edificio inherits Unidad {
 		jugador.destruirEdificio(self)
 		game.removeVisual(self)
 	}
-	method curar(){}
+	method curar(_){
+		game.say(self, "No me puedo curar")
+	}
 }

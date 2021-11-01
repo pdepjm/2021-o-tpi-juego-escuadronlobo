@@ -29,7 +29,6 @@ class Ataque{
 	method realizarEfectoAtaque(_) {}
 	
 	method marcarComoSeleccionado(nuevoAtacante){
-		game.say(cursor, "ataque seleccionado")
 		atacante = nuevoAtacante
 		posicionesAtacables = self.posicionesAtacables() // guardo esto para mejorar el rendimiento
 	}

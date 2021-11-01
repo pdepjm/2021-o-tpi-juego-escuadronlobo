@@ -8,12 +8,10 @@ program juego {
 	configuracionBoard.configurarBoard()
 	
 	game.title("TABLE WAR")
-	game.boardGround("tablero.png")
-	
-	teclado.teclasCursor()
-	teclado.teclasTurno()		
+	game.boardGround("tablero.png")		
 	
 	menuPrincipal.mostrar()
+	menuPrincipal.animacion()
 	menuPrincipal.iniciar()	
 	
 	game.start()

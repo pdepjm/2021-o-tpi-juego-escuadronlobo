@@ -9,12 +9,17 @@ import jugadores.*
 
 object teclado{
 	
-	method teclaInicio() {keyboard.enter().onPressDo {
-		if(menuPrincipal.menuHabilitado()) { 
-				menuPrincipal.menuHabilitado(false)
-				menuPrincipal.trancision()
-				game.schedule(2000,{game.removeVisual(menuPrincipal)
-				configuracion.configuracionInicial()})
+	method teclaInicio(pantalla) {keyboard.enter().onPressDo {
+		if(pantalla.habilitado()) {
+				pantalla.habilitado(false)
+				pantalla.trancisionFinal()
+				game.schedule(1200,{
+					game.removeVisual(pantalla)
+					if(pantalla.continua()){
+					pantalla.siguiente().transicionInicial()
+					pantalla.siguiente().iniciar()
+					}
+				})
 				
 		}}
 	}
@@ -27,7 +32,7 @@ object teclado{
 		keyboard.down().onPressDo({ cursor.mover(abajo) })
 		keyboard.num(1).onPressDo({ turnoManager.atacarConJugadorActual(1) })
 		keyboard.k().onPressDo({cursor.atacar()})
-		
+	
 	}
 	
 	method teclasTurno(){
