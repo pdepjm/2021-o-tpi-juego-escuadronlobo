@@ -1,14 +1,19 @@
-# Nombre del juego (<- borrar y completar)
+# Table War
 
 ## Equipo de desarrollo
 
-- Alguien
-- Persona
-- etc.
+- Marco Rodriguez Melgarejo
+- Marco Delgado
+- Alejandro Lapa
+- Matías Lucero
+- Agustín Sanjuán
 
 ## Capturas
 
-(agregar)
+![image](https://user-images.githubusercontent.com/82128316/139607484-68510773-f5f1-4f0e-9ec2-d4b0a394656a.png)
+
+![image](https://user-images.githubusercontent.com/82128316/139607498-64ea7b7a-b663-405d-a4fe-921cd1550652.png)
+
 
 ## Reglas de Juego / Instrucciones
 
@@ -16,4 +21,4 @@
 
 ## Respuestas teóricas
 
-(link al archivo o bien responder acá)
+https://docs.google.com/document/d/11zRzvSTcbUXjtTZd2bzYikJUDjXa_z8ES_5UL02ZoV8/edit?usp=sharing
