@@ -65,6 +65,27 @@ class Personaje inherits Unidad {
 	
 }
 
+class Tanque inherits Personaje {
+	override method mover(direccion){
+		position = direccion.proximaPosicion(position)
+		direccion.orientar(self)
+	}
+	
+	method mirarDerecha() {
+		self.image(jugador.tanqueDerecha())
+	}
+	method mirarIzquierda() {
+		self.image(jugador.tanqueIzquierda())
+	}
+	method mirarAbajo() {
+		self.image(jugador.tanqueAbajo())
+	}
+	method mirarArriba() {
+		self.image(jugador.tanqueArriba())
+	}
+}
+
+
 class Avion inherits Personaje{
 	method volarA(posicion) { position = posicion }
 	

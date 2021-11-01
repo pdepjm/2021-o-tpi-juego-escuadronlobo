@@ -86,6 +86,14 @@ object jugador1 inherits Jugador {
 	method avionIzquierda() = "avionIzquierda1.png" 
 	method avionArriba() = "avionArriba1.png"
 	method avionAbajo() = "avionAbajo1.png"
+	
+	// Tanques
+	
+	method tanqueDerecha() = "tanqueDerecha1.png"
+	method tanqueIzquierda() = "tanqueIzquierda1.png" 
+	method tanqueArriba() = "tanqueArriba1.png"
+	method tanqueAbajo() = "tanqueAbajo1.png"
+	
 }
 
 
@@ -103,4 +111,12 @@ object jugador2 inherits Jugador {
 	method avionIzquierda() = "avionIzquierda2.png" 
 	method avionArriba() = "avionArriba2.png"
 	method avionAbajo() = "avionAbajo2.png"
+	
+	// Tanques
+	
+	method tanqueDerecha() = "tanqueDerecha2.png"
+	method tanqueIzquierda() = "tanqueIzquierda2.png" 
+	method tanqueArriba() = "tanqueArriba2.png"
+	method tanqueAbajo() = "tanqueAbajo2.png"
+	
 }
