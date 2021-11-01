@@ -60,8 +60,6 @@ object cursor{
 		ataqueSeleccionado = ningunAtaque
 	}
 	
-	//method cambiarCursor() = 
-	
 	// para los tests
 	method ataqueSeleccionado() = ataqueSeleccionado
 	method ataqueSeleccionado(nuevo) {ataqueSeleccionado = nuevo}
@@ -98,6 +96,8 @@ object tablero{
 	}
 	
 	method posicionesCasillas() = casillas.map({casilla => casilla.position()})
+	
+	method columna(n) = casillas.filter({casilla => casilla.coordenadas().x() == n})
 	
 	//casilleros que estan en la misma fila o columna que el casillero pasado como parametro, y no tienen ningun objeto en el medio de los dos.
 	method casillasAlcanzablesEnUnaLineaRecta(casilla) = casillas.filter({otroCasillero => casilla.puedeSerAlcanzadaEnUnaLineaRecta(otroCasillero)}) // NO ANDA

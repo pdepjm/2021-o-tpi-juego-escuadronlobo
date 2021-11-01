@@ -33,3 +33,13 @@ class RangoRedondo inherits Rango{ // NO SE SI ANDA, PROBAR MAS ADELANTE
 	override method posiciones() = tablero.casillas().filter({ casilla => self.distanciaMenorA(casilla.position(), rangoMaximo + 1) }).map({casillero => casillero.position()})
 	method distanciaMenorA(casillero, distancia) = distancia < posicionBase.distance(casillero)
 }
+
+class RangoLineaRectaDesocupados inherits Rango{
+	const posicionBase
+	override method posiciones() = tablero.casillasEnLaMismaFilaOColumna(tablero.casillero(posicionBase)).filter({casillero => not casillero.estaOcupado()}).map({casillero => casillero.position()})
+}
+
+class RangoColumnas inherits Rango{
+	const columnas
+	override method posiciones() = columnas.map({n => tablero.columna(n)}).flatten().map({casillero => casillero.position()})
+}
