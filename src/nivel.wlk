@@ -23,7 +23,7 @@ object configuracion{
     const soldadoJp2 = new Personaje(rangoMaximoMovimiento = 2, image = "axis.png", position = game.at(13,7), vida = 100, ataques = [new Rifle(potencia = 50, rangoMaximo = 4)])
 	const healerJp2 = new Personaje(rangoMaximoMovimiento = 2, image = "healer2.png", vida = 60, ataques = [new GomeraCuradora(potencia = 50, rangoMaximo = 2)], position= game.at(13,6))
 
-	const avionJp2 = new Avion(rangoMaximoMovimiento = 2, image = "avionDerecha2.png", position = game.at(13,5), vida = 100, ataques = [new Bombardeo(potencia = 30)])
+	const avionJp2 = new Avion(rangoMaximoMovimiento = 2, image = "avionIzquierda2.png", position = game.at(13,5), vida = 100, ataques = [new Bombardeo(potencia = 30)])
 	const tanqueJp2 = new Tanque(rangoMaximoMovimiento = 2, image = "tanqueIzquierda2.png", position = game.at(13,4), vida = 250, ataques = [new Rifle(potencia = 100, rangoMaximo = 2)])
 
 	
