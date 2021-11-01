@@ -1,6 +1,7 @@
 import wollok.game.*
 import tablero.*
-
+import personajes.*
+import direcciones.*
 
 class Jugador {
 	var personajes = []
@@ -59,6 +60,7 @@ class Jugador {
 	
 	// para testear
 	method personajes() = personajes
+	
 }
 
 object jugador1 inherits Jugador {
@@ -68,7 +70,14 @@ object jugador1 inherits Jugador {
 	override method perdio() = personajes == [] or edificios == []
 	method cursorJugador() = "cursor.png"
 
+	// Aviones
+	
+	method avionDerecha() = "avionDerecha1.png"
+	method avionIzquierda() = "avionIzquierda1.png" 
+	method avionArriba() = "avionArriba1.png"
+	method avionAbajo() = "avionAbajo1.png"
 }
+
 
 object jugador2 inherits Jugador {
 	var property position = game.at(-1,0)
@@ -76,4 +85,12 @@ object jugador2 inherits Jugador {
 	method siguiente() = jugador1
 	method cursorJugador() = "cursor2.png"
 	override method perdio() = personajes == [] 
+	
+	
+	// Aviones
+	
+	method avionDerecha() = "avionDerecha2.png"
+	method avionIzquierda() = "avionIzquierda2.png" 
+	method avionArriba() = "avionArriba2.png"
+	method avionAbajo() = "avionAbajo2.png"
 }
