@@ -19,7 +19,6 @@ object turnoManager {
 		else{
 			if (self.puedeAtacar(cursor.personajeApuntado())){ 
 				self.jugadorActual().realizarAtaque(n)
-				turno.agregarAtacante(cursor.personajeApuntado())
 				self.chequearFinDeTurno()
 			}
 			else{
@@ -27,6 +26,7 @@ object turnoManager {
 			}
 		}
 	}
+	method registrarAtaque(atacante) { turno.agregarAtacante(atacante) }
 	
 	method intentarAgarrarPersonaje(){
 		if (turno.maximoDeMovidasAlcanzado()){
