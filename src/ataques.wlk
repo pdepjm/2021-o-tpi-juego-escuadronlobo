@@ -34,6 +34,7 @@ class Ataque{
 	method realizarAtaque(posicion){
 		if (self.esAtacable(posicion)){
 			self.realizarEfectoAtaque(posicion)
+			turnoManager.registrarAtaque(atacante)
 			self.borrarAtacanteSeleccionado()
 			cursor.borrarAtaqueSeleccionado()
 			tablero.despintarCasillerosAtaque()
