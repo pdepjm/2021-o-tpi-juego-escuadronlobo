@@ -55,6 +55,9 @@ object configuracion{
 		game.addVisual(soldadoJp2)
 		game.addVisual(avionJp2)
 		
+		game.addVisual(marcadorMovimientos)
+		game.addVisual(marcadorAtaques)
+		
 		game.addVisual(cursor)
 	}
 	
