@@ -5,7 +5,7 @@ import turnos.*
 
 object cursor{
 	var property position = game.at(0,7)
-	var seleccionado = null
+	var seleccionado = ningunPersonaje
 	var ataqueSeleccionado = ningunAtaque
 	//const ubicacionesOcupadas = #{}
 	
@@ -13,22 +13,31 @@ object cursor{
 	method seleccionado() = seleccionado
 	method mover(direccion) {
 		position = direccion.proximaPosicion(position)
-		if (seleccionado != null) seleccionado.mover(direccion) 
+		seleccionado.mover(direccion) 
 	}
 	method ubicacionOcupada() = game.colliders(self).size() > 0
 	method personajeApuntado(){ return game.uniqueCollider(self)}
 
 	method seleccionar(){
-		if (ataqueSeleccionado == ningunAtaque){
-			if (seleccionado == null) { 
-				turnoManager.intentarAgarrarPersonaje()
-			}
-			else {
-				self.intentarSoltarPersonaje()
+		if (self.ubicacionOcupada()){
+			if (ataqueSeleccionado == ningunAtaque){
+				if (seleccionado == ningunPersonaje) { 
+					turnoManager.intentarAgarrarPersonaje()
+				}
+				else {
+					self.intentarSoltarPersonaje()
+				}
 			}
 		}
 	}
-	
+	method pasarTurno(){
+		self.cancelarAtaque()
+		self.intentarSoltarPersonaje()
+		if (seleccionado == ningunPersonaje){
+			turnoManager.pasarTurno()
+		}
+	}
+	method cancelarAtaque(){ ataqueSeleccionado.cancelarAtaque() }
 	method seleccionarPersonaje(){
 		seleccionado = self.personajeApuntado()
 		seleccionado.marcarComoPersonajeSeleccionado()
@@ -42,11 +51,11 @@ object cursor{
 			game.say(seleccionado, "no me puedo mover ahí")
 		}
 	}
-	method borrarPersonajeSeleccionado(){seleccionado = null}
+	method borrarPersonajeSeleccionado(){seleccionado = ningunPersonaje}
 	
 	method seleccionarAtaque(n){
-		if (seleccionado != null) {self.intentarSoltarPersonaje()}
-		seleccionado = null
+		self.intentarSoltarPersonaje()
+		self.borrarPersonajeSeleccionado()
 		ataqueSeleccionado = self.personajeApuntado().ataque(n)
 		ataqueSeleccionado.marcarComoSeleccionado(self.personajeApuntado())
 	}
@@ -63,6 +72,11 @@ object cursor{
 	// para los tests
 	method ataqueSeleccionado() = ataqueSeleccionado
 	method ataqueSeleccionado(nuevo) {ataqueSeleccionado = nuevo}
+}
+
+object ningunPersonaje{
+	method mover(_){}
+	method puedeMoverseA(_) = true
 }
 
 object tablero{

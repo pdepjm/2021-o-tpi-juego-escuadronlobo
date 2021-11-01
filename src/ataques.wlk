@@ -37,14 +37,17 @@ class Ataque{
 			turnoManager.registrarAtaque(atacante)
 			self.borrarAtacanteSeleccionado()
 			cursor.borrarAtaqueSeleccionado()
-			tablero.despintarCasillerosAtaque()
-			// marcar como que atacó en el Turno
 			rango = rangoIlimitado
 			}
 		else (game.say(cursor, "no se puede atacar esta ubicación"))
 	}
 	method borrarAtacanteSeleccionado(){
 		atacante = null
+	}
+	
+	method cancelarAtaque(){
+		self.borrarAtacanteSeleccionado()
+		cursor.borrarAtaqueSeleccionado()
 	}
 	
 	method esAtacable(posicion) = rango.estaEnElRango(posicion)
@@ -68,6 +71,7 @@ object ningunAtaque{
 		}
 		else return "prohibido.png"
 	}
+	method cancelarAtaque(){}
 }
 
 class PegaEnUnaCasilla inherits Ataque{
