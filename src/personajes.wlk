@@ -65,49 +65,27 @@ class Personaje inherits Unidad {
 	
 }
 
-class Tanque inherits Personaje {
-	override method mover(direccion){
-		position = direccion.proximaPosicion(position)
-		direccion.orientar(self)
+class VehiculoDeGuerra inherits Personaje{
+
+	override method mover(direccion) {
+		super(direccion)
+		image = self.tipo() + direccion.toString() + jugador.toString() + ".png"
 	}
 	
-	method mirarDerecha() {
-		self.image(jugador.tanqueDerecha())
-	}
-	method mirarIzquierda() {
-		self.image(jugador.tanqueIzquierda())
-	}
-	method mirarAbajo() {
-		self.image(jugador.tanqueAbajo())
-	}
-	method mirarArriba() {
-		self.image(jugador.tanqueArriba())
-	}
+	method tipo() // Método Abstracto
+}
+
+class Tanque inherits VehiculoDeGuerra {
+	
+	override method tipo () = "tanque"
 }
 
 
-class Avion inherits Personaje{
+class Avion inherits VehiculoDeGuerra {
+	
+	override method tipo () = "avion"
+	
 	method volarA(posicion) { position = posicion }
-	
-	override method mover(direccion){
-		position = direccion.proximaPosicion(position)
-		direccion.orientar(self)
-	}
-	
-	method mirarDerecha() {
-		self.image(jugador.avionDerecha())
-	}
-	method mirarIzquierda() {
-		self.image(jugador.avionIzquierda())
-	}
-	method mirarAbajo() {
-		self.image(jugador.avionAbajo())
-	}
-	method mirarArriba() {
-		self.image(jugador.avionArriba())
-	}
-	
-	
 }
 
 
