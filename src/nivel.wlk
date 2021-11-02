@@ -151,23 +151,24 @@ object controles inherits Pantalla (image = "controles16.png"){
 		}
 }
 
-object instrucciones inherits Pantalla (image = "instrucciones12.png"){
+object instrucciones inherits Pantalla (image = "instrucciones14.png"){
 	
-	override method continua() = false 
+	method siguiente() = explicacionTropas
 	
 	method transicionInicial(){
 			self.mostrar()
-			game.schedule(200,{=> self.image("instrucciones11.png")})
-			game.schedule(250,{=> self.image("instrucciones10.png")})
-			game.schedule(300,{=> self.image("instrucciones9.png")})
-			game.schedule(350,{=> self.image("instrucciones8.png")})
-			game.schedule(400,{=> self.image("instrucciones7.png")})
-			game.schedule(450,{=> self.image("instrucciones6.png")})
-			game.schedule(500,{=> self.image("instrucciones5.png")})
-			game.schedule(550,{=> self.image("instrucciones4.png")})
-			game.schedule(600,{=> self.image("instrucciones3.png")})
-			game.schedule(650,{=> self.image("instrucciones2.png")})
-			
+			game.schedule(200,{=> self.image("instrucciones13.png")})
+			game.schedule(250,{=> self.image("instrucciones12.png")})
+			game.schedule(300,{=> self.image("instrucciones11.png")})
+			game.schedule(350,{=> self.image("instrucciones10.png")})
+			game.schedule(400,{=> self.image("instrucciones9.png")})
+			game.schedule(450,{=> self.image("instrucciones8.png")})
+			game.schedule(500,{=> self.image("instrucciones7.png")})
+			game.schedule(550,{=> self.image("instrucciones6.png")})
+			game.schedule(600,{=> self.image("instrucciones5.png")})
+			game.schedule(650,{=> self.image("instrucciones4.png")})
+			game.schedule(700,{=> self.image("instrucciones3.png")})
+			game.schedule(750,{=> self.image("instrucciones2.png")})
 		}
 		
 		
@@ -183,11 +184,49 @@ object instrucciones inherits Pantalla (image = "instrucciones12.png"){
 			game.schedule(600,{=> self.image("instrucciones10.png")})
 			game.schedule(650,{=> self.image("instrucciones11.png")})
 			game.schedule(700,{=> self.image("instrucciones12.png")})
-			game.schedule(1200,{=> configuracion.configuracionInicial()})	
+			game.schedule(750,{=> self.image("instrucciones13.png")})
+			game.schedule(800,{=> self.image("instrucciones14.png")})	
 		}
 	
 }
 
+
+object explicacionTropas inherits Pantalla (image = "explicacionTropas13.png") {
+	override method continua() = false 
+	
+	method transicionInicial(){
+			self.mostrar()
+			game.schedule(200,{=> self.image("explicacionTropas12.png")})
+			game.schedule(250,{=> self.image("explicacionTropas11.png")})
+			game.schedule(300,{=> self.image("explicacionTropas10.png")})
+			game.schedule(350,{=> self.image("explicacionTropas9.png")})
+			game.schedule(400,{=> self.image("explicacionTropas8.png")})
+			game.schedule(450,{=> self.image("explicacionTropas7.png")})
+			game.schedule(500,{=> self.image("explicacionTropas6.png")})
+			game.schedule(550,{=> self.image("explicacionTropas5.png")})
+			game.schedule(600,{=> self.image("explicacionTropas4.png")})
+			game.schedule(650,{=> self.image("explicacionTropas3.png")})
+			game.schedule(700,{=> self.image("explicacionTropas2.png")})
+			game.schedule(750,{=> self.image("explicacionTropas.png")})	
+	}
+	
+	method trancisionFinal(){
+			game.schedule(200,{=> self.image("explicacionTropas.png")})
+			game.schedule(250,{=> self.image("explicacionTropas2.png")})
+			game.schedule(300,{=> self.image("explicacionTropas3.png")})
+			game.schedule(350,{=> self.image("explicacionTropas4.png")})
+			game.schedule(400,{=> self.image("explicacionTropas5.png")})
+			game.schedule(450,{=> self.image("explicacionTropas6.png")})
+			game.schedule(500,{=> self.image("explicacionTropas7.png")})
+			game.schedule(550,{=> self.image("explicacionTropas8.png")})
+			game.schedule(600,{=> self.image("explicacionTropas9.png")})
+			game.schedule(650,{=> self.image("explicacionTropas10.png")})
+			game.schedule(700,{=> self.image("explicacionTropas11.png")})
+			game.schedule(750,{=> self.image("explicacionTropas12.png")})
+			game.schedule(800,{=> self.image("explicacionTropas13.png")})	
+			game.schedule(900,{=> configuracion.configuracionInicial()})
+	}
+}
 		
 		
 		
