@@ -13,9 +13,9 @@ object configuracion{
 	//Unidades Jp1
 	const soldadoJp1 = new Personaje(rangoMaximoMovimiento = 2, image = "ally.png", position = game.at(0,7), vida = 100, ataques = [new Rifle(potencia = 50, rangoMaximo = 4)])
 	const soldado2Jp1 = new Personaje(rangoMaximoMovimiento = 2, image = "ally.png", position = game.at(0,6), vida = 100, ataques = [new Rifle(potencia = 50, rangoMaximo = 4)])
-	const avionJp1 = new Avion(rangoMaximoMovimiento = 6, image = "avionDerecha1.png", position = game.at(0,5), vida = 150, ataques = [new Bombardeo(potencia = 50)])
+	const avionJp1 = new Avion(rangoMaximoMovimiento = 6, image = "avionDerechajugador1.png", position = game.at(0,5), vida = 150, ataques = [new Bombardeo(potencia = 50)])
 	const healerJp1 = new Personaje(rangoMaximoMovimiento = 2, image = "healer.png", vida = 100, ataques = [new GomeraCuradora(potencia = 75, rangoMaximo = 2)], position= game.at(0,4))
-    const tanqueJp1 = new Tanque(rangoMaximoMovimiento = 1, image = "tanqueDerecha1.png", position = game.at(0,3), vida = 250, ataques = [new Rifle(potencia = 100, rangoMaximo = 2), new Rifle(potencia = 50, rangoMaximo = 4)])
+    const tanqueJp1 = new Tanque(rangoMaximoMovimiento = 1, image = "tanqueDerechajugador1.png", position = game.at(0,3), vida = 250, ataques = [new Rifle(potencia = 100, rangoMaximo = 2), new Rifle(potencia = 50, rangoMaximo = 4)])
     
     const edificio1 = new Edificio(position = game.at(3,7), image = "edificio1.png", vida = 300)
 	const edificio2 = new Edificio(position = game.at(5,4), image = "edificio1.png", vida = 400)
@@ -24,9 +24,9 @@ object configuracion{
 	// Unidades Jp2
     const soldadoJp2 = new Personaje(rangoMaximoMovimiento = 2, image = "axis.png", position = game.at(13,7), vida = 100, ataques = [new Rifle(potencia = 50, rangoMaximo = 4)])
     const soldado2Jp2 = new Personaje(rangoMaximoMovimiento = 2, image = "axis.png", position = game.at(13,6), vida = 100, ataques = [new Rifle(potencia = 50, rangoMaximo = 4)])
-	const avionJp2 = new Avion(rangoMaximoMovimiento = 6, image = "avionDerecha2.png", position = game.at(13,5), vida = 150, ataques = [new Bombardeo(potencia = 50)])
+	const avionJp2 = new Avion(rangoMaximoMovimiento = 6, image = "avionIzquierdajugador2.png", position = game.at(13,5), vida = 150, ataques = [new Bombardeo(potencia = 50)])
 	const healerJp2 = new Personaje(rangoMaximoMovimiento = 2, image = "healer2.png", vida = 100, ataques = [new GomeraCuradora(potencia = 75, rangoMaximo = 2)], position= game.at(13,4))
-    const tanqueJp2 = new Tanque(rangoMaximoMovimiento = 1, image = "tanqueDerecha2.png", position = game.at(13,3), vida = 250, ataques = [new Rifle(potencia = 100, rangoMaximo = 2),  new Rifle(potencia = 50, rangoMaximo = 4)])
+    const tanqueJp2 = new Tanque(rangoMaximoMovimiento = 1, image = "tanqueIzquierdajugador2.png", position = game.at(13,3), vida = 250, ataques = [new Rifle(potencia = 100, rangoMaximo = 2),  new Rifle(potencia = 50, rangoMaximo = 4)])
 	const demoledor = new Demoledor(rangoMaximoMovimiento = 1, image = "pepita.png", position = game.at(13,2), vida = 300, ataques = [new Demolicion(potencia = 150)])
 
 	// Lista de las Unidades

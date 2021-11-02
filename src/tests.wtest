@@ -277,17 +277,75 @@ describe "turnos"{
 		turnoManager.atacarConJugadorActual(1)
 		assert.equals(turnoManager.jugadorActual(), jugador2)
 	}
-//	test "no te deja atacar si alcanzaste el máximo de ataques"{
-//		
-//	}
+	test "no te deja atacar si alcanzaste el máximo de ataques"{
+		game.clear()
+		tablero.configurarCasillas()
+		jugador1.agregarPersonajes([soldadoJp1, healerJp1, avionJp1])
+		jugador1.agregarEdificios([edificio1])
+		game.addVisual(soldadoJp1)
+		game.addVisual(healerJp1)
+		game.addVisual(avionJp1)
+		game.addVisual(cursor)
+		turnoManager.turno(new Turno(jugador = jugador1, movimientosMaximos = 2, ataquesMaximos = 2))
+		self.atacarCon(soldadoJp1)
+		self.atacarCon(healerJp1)
+		
+		cursor.position(avionJp1.position())
+		turnoManager.atacarConJugadorActual(1)
+		
+		assert.equals(cursor.ataqueSeleccionado(), ningunAtaque)
+	}
 //	test "no te deja atacar si ya atacaste con esa unidad"{
+//		game.clear()
+//		tablero.configurarCasillas()
+//		jugador1.agregarPersonajes([soldadoJp1, healerJp1, avionJp1])
+//		jugador1.agregarEdificios([edificio1])
+//		game.addVisual(soldadoJp1)
+//		game.addVisual(healerJp1)
+//		game.addVisual(avionJp1)
+//		game.addVisual(cursor)
+//		turnoManager.turno(new Turno(jugador = jugador1, movimientosMaximos = 2, ataquesMaximos = 2))
+//		self.atacarCon(avionJp1)
 //		
-//	}
-//	test "no te deja mover si llegaste al maximo de movimientos"{
+//		cursor.position(avionJp1.position())
+//		turnoManager.atacarConJugadorActual(1)
 //		
+//		assert.equals(cursor.ataqueSeleccionado(), ningunAtaque)	
 //	}
-//	test "no te deja mover si ya moviste esa unidad"{
-//		
-//	}
+	test "no te deja mover si llegaste al maximo de movimientos"{
+		game.clear()
+		tablero.configurarCasillas()
+		jugador1.agregarPersonajes([soldadoJp1, healerJp1, avionJp1])
+		jugador1.agregarEdificios([edificio1])
+		game.addVisual(soldadoJp1)
+		game.addVisual(healerJp1)
+		game.addVisual(avionJp1)
+		game.addVisual(cursor)
+		turnoManager.turno(new Turno(jugador = jugador1, movimientosMaximos = 2, ataquesMaximos = 2))
+		self.moverALaMismaPosicion(soldadoJp1)
+		self.moverALaMismaPosicion(healerJp1)
+		
+		cursor.position(avionJp1.position())
+		cursor.seleccionar()
+		
+		assert.equals(cursor.seleccionado(), ningunPersonaje)			
+	}
+	test "no te deja mover si ya moviste esa unidad"{
+		game.clear()
+		tablero.configurarCasillas()
+		jugador1.agregarPersonajes([soldadoJp1, healerJp1, avionJp1])
+		jugador1.agregarEdificios([edificio1])
+		game.addVisual(soldadoJp1)
+		game.addVisual(healerJp1)
+		game.addVisual(avionJp1)
+		game.addVisual(cursor)
+		turnoManager.turno(new Turno(jugador = jugador1, movimientosMaximos = 2, ataquesMaximos = 2))
+		self.moverALaMismaPosicion(soldadoJp1)
+		
+		cursor.position(soldadoJp1.position())
+		cursor.seleccionar()
+		
+		assert.equals(cursor.seleccionado(), ningunPersonaje)
+	}
 }
 
