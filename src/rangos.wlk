@@ -19,7 +19,7 @@ class RangoCuadrado inherits Rango{ // ANDA
 }
 
 class RangoLineaRecta inherits RangoCuadrado{ // ANDA
-	override method posiciones() = tablero.casillasEnLaMismaFilaOColumna(tablero.casillero(posicionBase)).map({casillero => casillero.position()}).filter({ posicion => self.distanciaMenorA(posicion, rangoMaximo + 1) })
+	override method posiciones() = if (tablero.estaEnElTablero(posicionBase)) tablero.casillasEnLaMismaFilaOColumna(tablero.casillero(posicionBase)).map({c => c.position()}).filter({ p => self.distanciaMenorA(p, rangoMaximo + 1) }) else []
 }
 
 object rangoIlimitado inherits Rango{
@@ -27,7 +27,7 @@ object rangoIlimitado inherits Rango{
 }
 
 class RangoLineaRectaEdificios inherits RangoLineaRecta{
-	override method posiciones() = tablero.casillasEnLaMismaFilaOColumna(tablero.casillero(posicionBase)).filter({casillero => casillero.tieneUnEdificio()}).map({casillero => casillero.position()}).filter({ posicion => self.distanciaMenorA(posicion, rangoMaximo + 1) })
+	override method posiciones() = if (tablero.estaEnElTablero(posicionBase)) tablero.casillasEnLaMismaFilaOColumna(tablero.casillero(posicionBase)).filter({c => c.tieneUnEdificio()}).map({c => c.position()}).filter({ p => self.distanciaMenorA(p, rangoMaximo + 1) }) else []
 }
 
 class RangoRedondo inherits Rango{ // NO SE SI ANDA, PROBAR MAS ADELANTE
@@ -40,7 +40,7 @@ class RangoRedondo inherits Rango{ // NO SE SI ANDA, PROBAR MAS ADELANTE
 
 class RangoLineaRectaDesocupados inherits Rango{
 	const posicionBase
-	override method posiciones() = tablero.casillasEnLaMismaFilaOColumna(tablero.casillero(posicionBase)).filter({casillero => not casillero.estaOcupado()}).map({casillero => casillero.position()})
+	override method posiciones() = if (tablero.estaEnElTablero(posicionBase)) tablero.casillasEnLaMismaFilaOColumna(tablero.casillero(posicionBase)).filter({casillero => not casillero.estaOcupado()}).map({casillero => casillero.position()}) else []
 }
 
 class RangoColumnas inherits Rango{
