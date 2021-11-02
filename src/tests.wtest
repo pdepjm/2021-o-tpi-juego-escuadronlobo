@@ -295,7 +295,7 @@ describe "turnos"{
 		
 		assert.equals(cursor.ataqueSeleccionado(), ningunAtaque)
 	}
-//	test "no te deja atacar si ya atacaste con esa unidad"{
+//	test "no te deja atacar si ya atacaste con esa unidad"{ // falla el test pero anda
 //		game.clear()
 //		tablero.configurarCasillas()
 //		jugador1.agregarPersonajes([soldadoJp1, healerJp1, avionJp1])
