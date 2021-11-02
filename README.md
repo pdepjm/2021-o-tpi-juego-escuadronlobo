@@ -12,12 +12,15 @@
 
 ![image](https://user-images.githubusercontent.com/82128316/139607484-68510773-f5f1-4f0e-9ec2-d4b0a394656a.png)
 
-![image](https://user-images.githubusercontent.com/82128316/139607498-64ea7b7a-b663-405d-a4fe-921cd1550652.png)
+
+![image](https://user-images.githubusercontent.com/82128316/139786466-a5d5d344-b486-4eb0-bda0-90fd2d6b864f.png)
 
 
 ## Reglas de Juego / Instrucciones
 
-(Escribirlas)
+![image](https://user-images.githubusercontent.com/82128316/139786400-29d11a4b-1f2a-4747-bf1b-1bd9bbcde188.png)
+
+![image](https://user-images.githubusercontent.com/82128316/139786440-1127b788-e488-4301-bf90-196ec5ef26ea.png)
 
 ## Respuestas teóricas
 
