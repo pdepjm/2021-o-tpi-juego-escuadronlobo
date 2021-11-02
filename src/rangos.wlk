@@ -3,7 +3,7 @@ import tablero.*
 class Rango{
 	method posiciones()
 	
-	method estaEnElRango(posicion) = self.posiciones().contains(posicion) // ANDA
+	method estaEnElRango(posicion) = self.posiciones().contains(posicion)
 }
 
 class RangoCuadrado inherits Rango{ // ANDA
@@ -24,6 +24,10 @@ class RangoLineaRecta inherits RangoCuadrado{ // ANDA
 
 object rangoIlimitado inherits Rango{
 	override method posiciones() = tablero.posicionesCasillas()
+}
+
+class RangoLineaRectaEdificios inherits RangoLineaRecta{
+	override method posiciones() = tablero.casillasEnLaMismaFilaOColumna(tablero.casillero(posicionBase)).filter({casillero => casillero.tieneUnEdificio()}).map({casillero => casillero.position()}).filter({ posicion => self.distanciaMenorA(posicion, rangoMaximo + 1) })
 }
 
 class RangoRedondo inherits Rango{ // NO SE SI ANDA, PROBAR MAS ADELANTE

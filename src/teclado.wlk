@@ -31,6 +31,7 @@ object teclado{
 		keyboard.up().onPressDo({ cursor.mover(arriba) })
 		keyboard.down().onPressDo({ cursor.mover(abajo) })
 		keyboard.num(1).onPressDo({ turnoManager.atacarConJugadorActual(1) })
+		keyboard.num(2).onPressDo({ turnoManager.atacarConJugadorActual(2) })
 		keyboard.k().onPressDo({cursor.atacar()})
 	
 	}

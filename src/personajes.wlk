@@ -23,7 +23,7 @@ class Unidad { // clase abstracta para personajes y edificios
 	
 	method recibirDanio (cantidad) {
 		vida = (vida - cantidad).max(0)
-		game.say(self, "Daño Recibido = " + cantidad.toString() + "\n Vida Restante = " + vida.toString())
+		game.say(self, "Daño = " + cantidad.toString() + "\n Vida = " + vida.toString())
 		self.chequearEstado()
 	}
 	
@@ -63,6 +63,8 @@ class Personaje inherits Unidad {
 		game.say(self, "Vida Recibida = " + cantidad.toString() + "\n Vida Restante = " + vida.toString())
 	}
 	
+	method tieneAtaque(n) = n <= ataques.size()
+	method esEdificio() = false
 }
 
 class VehiculoDeGuerra inherits Personaje{
@@ -97,4 +99,10 @@ class Edificio inherits Unidad {
 	method curar(_){
 		game.say(self, "No me puedo curar")
 	}
+	
+	method esEdificio() = true
+}
+
+class Demoledor inherits VehiculoDeGuerra{
+    override method tipo() = "demoledor"
 }

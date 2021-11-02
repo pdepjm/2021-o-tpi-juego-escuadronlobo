@@ -9,8 +9,9 @@ class Jugador {
 	var personajes = []
 	var edificios = []
 	var property oponente = null
-	method rangoDeDespliegueDeUnidades() = rangoIlimitado // TODO: que se puedan desplegar solo en las dos primeras columnas de su lado (o algo así)
 	
+	
+	method rangoDeDespliegueDeUnidades() = rangoIlimitado
 	method seleccionarParaMover(){
 		const personaje = cursor.personajeApuntado()
 		if(self.esDeJugador(personaje)){
@@ -22,11 +23,16 @@ class Jugador {
 		}
 	}
 	method realizarAtaque(n){
-		if(self.esDeJugador(cursor.personajeApuntado())){ 
-			cursor.seleccionarAtaque(n)
+		if(cursor.personajeApuntado().tieneAtaque(n)){
+			if(self.esDeJugador(cursor.personajeApuntado())){ 
+				cursor.seleccionarAtaque(n)
+			}
+			else{
+				game.say(cursor.personajeApuntado(), "Que haces bro")
+			}
 		}
 		else{
-			game.say(cursor.personajeApuntado(), "Que haces bro")
+			game.say(cursor.personajeApuntado(), "No tengo ataque " + n.toString())
 		}
 	}
 	
@@ -40,23 +46,10 @@ class Jugador {
 		listaPersonajes.forEach({personaje => self.agregarPersonaje(personaje)})
 	}
 	
-	method agregarEdificio(edificio){
-		edificios.add(edificio)
-		edificio.jugador(self)
-	} 
-	
-	method agregarEdificios(listaEdificios){
-		listaEdificios.forEach({edificio => self.agregarEdificio(edificio)})
-	}
 	method esDeJugador(personaje) = personajes.contains(personaje)
 	
 	method matarPersonaje(personaje) {
 		personajes.remove(personaje)
-		if (self.perdio()) oponente.ganar()
-	}
-	
-	method destruirEdificio(edificio){
-		edificios.remove(edificio)
 		if (self.perdio()) oponente.ganar()
 	}
 	
@@ -75,11 +68,27 @@ class Jugador {
 object jugador1 inherits Jugador {
 	var property position = game.at(-1,0)
 	var property image = "pantallaGanadoraJ1.png"	
+	
+	
 	method siguiente() = jugador2
-	override method perdio() = personajes == [] or edificios == []
+	override method perdio() = super() or edificios.isEmpty()
 	method cursorJugador() = "cursor.png"
 
 	override method rangoDeDespliegueDeUnidades() = new RangoColumnas(columnas = [1,2])
+	
+	method destruirEdificio(edificio){
+		edificios.remove(edificio)
+		if (self.perdio()) oponente.ganar()
+	}
+	
+	method agregarEdificio(edificio){
+		edificios.add(edificio)
+		edificio.jugador(self)
+	} 
+	
+	method agregarEdificios(listaEdificios){
+		listaEdificios.forEach({edificio => self.agregarEdificio(edificio)})
+	}
 	
 }
 
@@ -89,7 +98,6 @@ object jugador2 inherits Jugador {
 	var property image = "pantallaGanadoraJ2.png"
 	method siguiente() = jugador1
 	method cursorJugador() = "cursor2.png"
-	override method perdio() = personajes == [] 
-	override method rangoDeDespliegueDeUnidades() = new RangoColumnas(columnas = [7,8])	
-	
+	override method rangoDeDespliegueDeUnidades() = new RangoColumnas(columnas = [7,8])		
+
 }

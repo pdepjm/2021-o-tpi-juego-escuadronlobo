@@ -77,7 +77,7 @@ object ningunAtaque{
 class PegaEnUnaCasilla inherits Ataque{
 	override method realizarEfectoAtaque(posicion){
 		if (cursor.ubicacionOcupada()) {
-			game.say(atacante, "pium pium")
+			game.say(atacante, "pum pum")
 			cursor.personajeApuntado().recibirDanio(potencia)
 		}
 		else{
@@ -111,6 +111,10 @@ class GomeraCuradora inherits CuraEnUnaCasilla{
 class Rifle inherits PegaEnUnaCasilla{
 	const rangoMaximo
 	override method actualizarRango() { rango = new RangoLineaRecta(posicionBase = atacante.position(), rangoMaximo = rangoMaximo) }
+}
+
+class Demolicion inherits PegaEnUnaCasilla{
+	override method actualizarRango() { rango = new RangoLineaRectaEdificios(posicionBase = atacante.position(), rangoMaximo = 1) }
 }
 
 
