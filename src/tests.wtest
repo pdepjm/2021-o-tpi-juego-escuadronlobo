@@ -33,35 +33,48 @@ describe "Personajes" {
 	const soldadoNazi = new Personaje(rangoMaximoMovimiento = 2, position = game.at(0,8), image = "soldadoNazi.png", vida = 100, jugador = new Jugador(personajes = [soldadoNazi]), ataques = [new GomeraDePiedras(potencia = 30, rangoMaximo = 3)])
 	const healer = new Personaje(rangoMaximoMovimiento = 5, image = "healer.png", position = game.at(0, 10), vida = 50, jugador = new Jugador(personajes = [healer]), ataques = [new GomeraCuradora(potencia = 30, rangoMaximo = 3)])
 	const soldadoComun = new Personaje(rangoMaximoMovimiento = 4, image = "axis.png", position = game.at(0, 9), vida = 150, jugador = new Jugador(personajes = [soldadoComun, healer]))
+	const edificio = new Edificio(vida = 100, position = game.at(0,7), image = "edificio1.png", jugador = jugador1)
+	const personajes = [soldadoNazi,healer, soldadoComun, edificio]
 	
 	method initialize() {
-		game.addVisual(soldadoComun)
-		game.addVisual(soldadoNazi)
-		game.addVisual(healer)
+		game.clear()
 		game.addVisual(cursor)
+		personajes.forEach({personaje => game.addVisual(personaje)})
 	} 
 	
 	method posicionCursor(posicion) {
 		cursor.position(posicion)
 	}
 	
+	method asignarUnOponente() {
+		jugador1.oponente(jugador2)
+	}
+	
 	test "Personaje que ataca a otro personaje" {
 		self.posicionCursor(game.at(0,9))
 		soldadoNazi.ataque(1).atacante(soldadoNazi)
-		soldadoNazi.ataque(1).realizarEfectoAtaque(game.at(0,9)) // donde está pepita
+		soldadoNazi.ataque(1).realizarEfectoAtaque(game.at(0,9)) // donde está soldadoNazi
 		assert.equals(120, soldadoComun.vida())
 	}
-	/* 
+ 
 	test "Personaje que se muere al descontar todos sus puntos de vida" {
 		cursor.position(game.at(0,9))
 		soldadoNazi.ataque(1).atacante(soldadoNazi)
 		5.times({i => soldadoNazi.ataque(1).realizarEfectoAtaque(game.at(0,9))})
-		// pepita.recibirDanio(150)
-		assert.equals(0, pepita.vida())
-		assert.notThat(game.hasVisual(pepita))
-		assert.notThat(pepita.jugador().esDeJugador(pepita))
+		assert.equals(0, soldadoComun.vida())
+		assert.notThat(game.hasVisual(soldadoComun))
+		assert.notThat(soldadoComun.jugador().esDeJugador(soldadoComun))
 	}
-	*/
+	
+	test "Edifico que se destruye al descontar todos sus puntos de vida" {
+		self.asignarUnOponente()
+		cursor.position(game.at(0,7))
+		soldadoNazi.ataque(1).atacante(soldadoNazi)
+		4.times({i => soldadoNazi.ataque(1).realizarEfectoAtaque(game.at(0,7))})
+		assert.equals(0, edificio.vida())
+		assert.notThat(game.hasVisual(edificio))
+		assert.notThat(edificio.jugador().esDeJugador(edificio))
+	}
 }
 
 describe "ataques"{
