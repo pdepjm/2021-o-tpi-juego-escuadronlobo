@@ -23,16 +23,12 @@ class Jugador {
 		}
 	}
 	method realizarAtaque(n){
-		if(cursor.personajeApuntado().tieneAtaque(n)){
-			if(self.esDeJugador(cursor.personajeApuntado())){ 
-				cursor.seleccionarAtaque(n)
-			}
-			else{
-				game.say(cursor.personajeApuntado(), "Que haces bro")
-			}
+		if(self.esDeJugador(cursor.personajeApuntado())){
+			if(cursor.personajeApuntado().tieneAtaque(n)){cursor.seleccionarAtaque(n)}
+			else{game.say(cursor.personajeApuntado(), "No tengo ataque " + n.toString())}
 		}
 		else{
-			game.say(cursor.personajeApuntado(), "No tengo ataque " + n.toString())
+			game.say(cursor.personajeApuntado(), "Que haces bro")
 		}
 	}
 	

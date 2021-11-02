@@ -60,7 +60,7 @@ class Personaje inherits Unidad {
 	
 	method curar(cantidad) {
 		vida = (vida + cantidad).min(100)
-		game.say(self, "Vida Recibida = " + cantidad.toString() + "\n Vida Restante = " + vida.toString())
+		game.say(self, "Curado = " + cantidad.toString() + "\nVida = " + vida.toString())
 	}
 	
 	method tieneAtaque(n) = n <= ataques.size()
