@@ -36,7 +36,7 @@ object teclado{
 	}
 	
 	method teclasTurno(){
-			keyboard.t().onPressDo({turnoManager.pasarTurno()})
+			keyboard.t().onPressDo({cursor.pasarTurno()})
 	}
 }
 

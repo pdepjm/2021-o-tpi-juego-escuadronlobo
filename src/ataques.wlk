@@ -13,8 +13,8 @@ object testear{
 // Los ataques obtienen su rango por composición y su efecto por herencia
 class Ataque{
 	var atacante = null
-	var posicionesAtacables = []
 	var potencia
+	var rango = rangoIlimitado
 	
 	method miraCuandoEstaEnElRango() = "mira.png"
 	
@@ -23,32 +23,34 @@ class Ataque{
 		else return "prohibido.png"
 	}
 	
-	method posicionesAtacables() = self.rango().posiciones() // son objetos POSITION
 	// para redefinir en cada clase heredera
-	method rango() = rangoIlimitado
+	method actualizarRango() {}
 	method realizarEfectoAtaque(_) {}
 	
 	method marcarComoSeleccionado(nuevoAtacante){
 		atacante = nuevoAtacante
-		posicionesAtacables = self.posicionesAtacables() // guardo esto para mejorar el rendimiento
+		self.actualizarRango()
 	}
-	
 	method realizarAtaque(posicion){
 		if (self.esAtacable(posicion)){
 			self.realizarEfectoAtaque(posicion)
+			turnoManager.registrarAtaque(atacante)
 			self.borrarAtacanteSeleccionado()
 			cursor.borrarAtaqueSeleccionado()
-			tablero.despintarCasillerosAtaque()
-			posicionesAtacables = []
+			rango = rangoIlimitado
 			}
 		else (game.say(cursor, "no se puede atacar esta ubicación"))
 	}
-	
 	method borrarAtacanteSeleccionado(){
 		atacante = null
 	}
 	
-	method esAtacable(posicion) = posicionesAtacables.contains(posicion)
+	method cancelarAtaque(){
+		self.borrarAtacanteSeleccionado()
+		cursor.borrarAtaqueSeleccionado()
+	}
+	
+	method esAtacable(posicion) = rango.estaEnElRango(posicion)
 	
 	// para testear
 	method atacante() = atacante
@@ -69,6 +71,7 @@ object ningunAtaque{
 		}
 		else return "prohibido.png"
 	}
+	method cancelarAtaque(){}
 }
 
 class PegaEnUnaCasilla inherits Ataque{
@@ -97,21 +100,20 @@ class CuraEnUnaCasilla inherits Ataque{
 
 class GomeraDePiedras inherits PegaEnUnaCasilla{
 	const rangoMaximo
-	override method rango() = new RangoCuadrado(posicionBase = atacante.position(), rangoMaximo = rangoMaximo)
+	override method actualizarRango() { rango = new RangoCuadrado(posicionBase = atacante.position(), rangoMaximo = rangoMaximo) }
 }
 
 class GomeraCuradora inherits CuraEnUnaCasilla{
 	const rangoMaximo
-	override method rango() = new RangoCuadrado(posicionBase = atacante.position(), rangoMaximo = rangoMaximo)
+	override method actualizarRango() { rango = new RangoCuadrado(posicionBase = atacante.position(), rangoMaximo = rangoMaximo) }
 }
 
 class Rifle inherits PegaEnUnaCasilla{
 	const rangoMaximo
-	override method rango() = new RangoLineaRecta(posicionBase = atacante.position(), rangoMaximo = rangoMaximo)
+	override method actualizarRango() { rango = new RangoLineaRecta(posicionBase = atacante.position(), rangoMaximo = rangoMaximo) }
 }
 
 
-// TODO: hacer que use composición y herencia como los otros ataques
 class Bombardeo inherits Ataque{
 		
 	override method realizarEfectoAtaque(posicion){
@@ -129,8 +131,7 @@ class Bombardeo inherits Ataque{
 		}
 	}
 	
-	override method posicionesAtacables() = tablero.casillasEnLaMismaFilaOColumna(tablero.casilleroDe(atacante)).filter({casillero => not casillero.estaOcupado()}).map({casillero => casillero.position()})
-}
+	override method actualizarRango() { rango = new RangoLineaRectaDesocupados(posicionBase = atacante.position())}}
 
 class AtaqueMele{ // clase abstracta
 	

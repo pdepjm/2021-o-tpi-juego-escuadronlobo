@@ -9,7 +9,7 @@ class Jugador {
 	var personajes = []
 	var edificios = []
 	var property oponente = null
-	const rangoDeDespliegueDeUnidades = rangoIlimitado // TODO: que se puedan desplegar solo en las dos primeras columnas de su lado (o algo así)
+	method rangoDeDespliegueDeUnidades() = rangoIlimitado // TODO: que se puedan desplegar solo en las dos primeras columnas de su lado (o algo así)
 	
 	method seleccionarParaMover(){
 		const personaje = cursor.personajeApuntado()
@@ -33,7 +33,7 @@ class Jugador {
 	method agregarPersonaje(personaje) {
 		personajes.add(personaje)
 		personaje.jugador(self)
-		personaje.rango(rangoDeDespliegueDeUnidades)
+		personaje.rango(self.rangoDeDespliegueDeUnidades())
 	}
 	
 	method agregarPersonajes(listaPersonajes){
@@ -74,24 +74,12 @@ class Jugador {
 
 object jugador1 inherits Jugador {
 	var property position = game.at(-1,0)
-	var property image = "pantallaGanadoraJ1.png"
+	var property image = "pantallaGanadoraJ1.png"	
 	method siguiente() = jugador2
 	override method perdio() = personajes == [] or edificios == []
 	method cursorJugador() = "cursor.png"
 
-	// Aviones
-	
-	method avionDerecha() = "avionDerecha1.png"
-	method avionIzquierda() = "avionIzquierda1.png" 
-	method avionArriba() = "avionArriba1.png"
-	method avionAbajo() = "avionAbajo1.png"
-	
-	// Tanques
-	
-	method tanqueDerecha() = "tanqueDerecha1.png"
-	method tanqueIzquierda() = "tanqueIzquierda1.png" 
-	method tanqueArriba() = "tanqueArriba1.png"
-	method tanqueAbajo() = "tanqueAbajo1.png"
+	override method rangoDeDespliegueDeUnidades() = new RangoColumnas(columnas = [1,2])
 	
 }
 
@@ -102,19 +90,6 @@ object jugador2 inherits Jugador {
 	method siguiente() = jugador1
 	method cursorJugador() = "cursor2.png"
 	override method perdio() = personajes == [] 
-	
-	// Aviones
-	
-	method avionDerecha() = "avionDerecha2.png"
-	method avionIzquierda() = "avionIzquierda2.png" 
-	method avionArriba() = "avionArriba2.png"
-	method avionAbajo() = "avionAbajo2.png"
-	
-	// Tanques
-	
-	method tanqueDerecha() = "tanqueDerecha2.png"
-	method tanqueIzquierda() = "tanqueIzquierda2.png" 
-	method tanqueArriba() = "tanqueArriba2.png"
-	method tanqueAbajo() = "tanqueAbajo2.png"
+	override method rangoDeDespliegueDeUnidades() = new RangoColumnas(columnas = [7,8])	
 	
 }
