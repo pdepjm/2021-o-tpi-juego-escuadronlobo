@@ -32,10 +32,10 @@ describe "objetos direcciones"{
 describe "Personajes" {
 	const soldadoNazi = new Personaje(rangoMaximoMovimiento = 2, position = game.at(0,8), image = "soldadoNazi.png", vida = 100, jugador = new Jugador(personajes = [soldadoNazi]), ataques = [new GomeraDePiedras(potencia = 30, rangoMaximo = 3)])
 	const healer = new Personaje(rangoMaximoMovimiento = 5, image = "healer.png", position = game.at(0, 10), vida = 50, jugador = new Jugador(personajes = [healer]), ataques = [new GomeraCuradora(potencia = 30, rangoMaximo = 3)])
-	const pepita = new Personaje(rangoMaximoMovimiento = 4, image = "pepita.png", position = game.at(0, 9), vida = 150, jugador = new Jugador(personajes = [pepita, healer]))
+	const soldadoComun = new Personaje(rangoMaximoMovimiento = 4, image = "axis.png", position = game.at(0, 9), vida = 150, jugador = new Jugador(personajes = [soldadoComun, healer]))
 	
 	method initialize() {
-		game.addVisual(pepita)
+		game.addVisual(soldadoComun)
 		game.addVisual(soldadoNazi)
 		game.addVisual(healer)
 		game.addVisual(cursor)
@@ -49,7 +49,7 @@ describe "Personajes" {
 		self.posicionCursor(game.at(0,9))
 		soldadoNazi.ataque(1).atacante(soldadoNazi)
 		soldadoNazi.ataque(1).realizarEfectoAtaque(game.at(0,9)) // donde está pepita
-		assert.equals(120, pepita.vida())
+		assert.equals(120, soldadoComun.vida())
 	}
 	/* 
 	test "Personaje que se muere al descontar todos sus puntos de vida" {

@@ -23,7 +23,7 @@ class Unidad { // clase abstracta para personajes y edificios
 	
 	method recibirDanio (cantidad) {
 		vida = (vida - cantidad).max(0)
-		game.say(self, "Daño recibido = " + cantidad.toString() + "\n Vida = " + vida.toString())
+		game.say(self, "Daño = " + cantidad.toString() + "\n Vida = " + vida.toString())
 		self.chequearEstado()
 	}
 	
@@ -64,52 +64,30 @@ class Personaje inherits Unidad {
 	}
 	
 	method tieneAtaque(n) = n <= ataques.size()
-	
+	method esEdificio() = false
 }
 
-class Tanque inherits Personaje {
-	override method mover(direccion){
-		position = direccion.proximaPosicion(position)
-		direccion.orientar(self)
+class VehiculoDeGuerra inherits Personaje{
+
+	override method mover(direccion) {
+		super(direccion)
+		image = self.tipo() + direccion.toString() + jugador.toString() + ".png"
 	}
 	
-	method mirarDerecha() {
-		self.image(jugador.tanqueDerecha())
-	}
-	method mirarIzquierda() {
-		self.image(jugador.tanqueIzquierda())
-	}
-	method mirarAbajo() {
-		self.image(jugador.tanqueAbajo())
-	}
-	method mirarArriba() {
-		self.image(jugador.tanqueArriba())
-	}
+	method tipo() // Método Abstracto
+}
+
+class Tanque inherits VehiculoDeGuerra {
+	
+	override method tipo () = "tanque"
 }
 
 
-class Avion inherits Personaje{
+class Avion inherits VehiculoDeGuerra {
+	
+	override method tipo () = "avion"
+	
 	method volarA(posicion) { position = posicion }
-	
-	override method mover(direccion){
-		position = direccion.proximaPosicion(position)
-		direccion.orientar(self)
-	}
-	
-	method mirarDerecha() {
-		self.image(jugador.avionDerecha())
-	}
-	method mirarIzquierda() {
-		self.image(jugador.avionIzquierda())
-	}
-	method mirarAbajo() {
-		self.image(jugador.avionAbajo())
-	}
-	method mirarArriba() {
-		self.image(jugador.avionArriba())
-	}
-	
-	
 }
 
 
@@ -121,6 +99,8 @@ class Edificio inherits Unidad {
 	method curar(_){
 		game.say(self, "No me puedo curar")
 	}
+	
+	method esEdificio() = true
 }
 
 class Demoledor inherits VehiculoDeGuerra{

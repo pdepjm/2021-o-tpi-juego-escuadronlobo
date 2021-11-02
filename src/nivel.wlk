@@ -22,13 +22,17 @@ object configuracion{
 	const edificio3 = new Edificio(position = game.at(3,1), image = "edificio1.png", vida = 300)
 	
 	// Unidades Jp2
-    const soldadoJp2 = new Personaje(rangoMaximoMovimiento = 2, image = "ally.png", position = game.at(13,7), vida = 100, ataques = [new Rifle(potencia = 50, rangoMaximo = 4)])
-    const soldado2Jp2 = new Personaje(rangoMaximoMovimiento = 2, image = "ally.png", position = game.at(13,6), vida = 100, ataques = [new Rifle(potencia = 50, rangoMaximo = 4)])
-	const avionJp2 = new Avion(rangoMaximoMovimiento = 6, image = "avionDerecha1.png", position = game.at(13,5), vida = 150, ataques = [new Bombardeo(potencia = 50)])
-	const healerJp2 = new Personaje(rangoMaximoMovimiento = 2, image = "healer.png", vida = 100, ataques = [new GomeraCuradora(potencia = 75, rangoMaximo = 2)], position= game.at(13,4))
-    const tanqueJp2 = new Tanque(rangoMaximoMovimiento = 1, image = "tanqueDerecha1.png", position = game.at(13,3), vida = 250, ataques = [new Rifle(potencia = 100, rangoMaximo = 2),  new Rifle(potencia = 50, rangoMaximo = 4)])
-	const demoledor = new Demoledor(rangoMaximoMovimiento = 1, image = "", position = game.at(13,2), vida = 300, ataques = [new Rifle(potencia = 150, rangoMaximo = 1)])
-	
+    const soldadoJp2 = new Personaje(rangoMaximoMovimiento = 2, image = "axis.png", position = game.at(13,7), vida = 100, ataques = [new Rifle(potencia = 50, rangoMaximo = 4)])
+    const soldado2Jp2 = new Personaje(rangoMaximoMovimiento = 2, image = "axis.png", position = game.at(13,6), vida = 100, ataques = [new Rifle(potencia = 50, rangoMaximo = 4)])
+	const avionJp2 = new Avion(rangoMaximoMovimiento = 6, image = "avionDerecha2.png", position = game.at(13,5), vida = 150, ataques = [new Bombardeo(potencia = 50)])
+	const healerJp2 = new Personaje(rangoMaximoMovimiento = 2, image = "healer2.png", vida = 100, ataques = [new GomeraCuradora(potencia = 75, rangoMaximo = 2)], position= game.at(13,4))
+    const tanqueJp2 = new Tanque(rangoMaximoMovimiento = 1, image = "tanqueDerecha2.png", position = game.at(13,3), vida = 250, ataques = [new Rifle(potencia = 100, rangoMaximo = 2),  new Rifle(potencia = 50, rangoMaximo = 4)])
+	const property demoledor = new Demoledor(rangoMaximoMovimiento = 1, image = "pepita.png", position = game.at(5,5), vida = 300, ataques = [new Demolicion(potencia = 150)])
+//	const demoledor = new Demoledor(rangoMaximoMovimiento = 1, image = "pepita.png", position = game.at(13,2), vida = 300, ataques = [new Demolicion(potencia = 150)])
+
+	// Lista de las Unidades
+	const unidades = [soldadoJp1, soldado2Jp1, avionJp1, healerJp1, tanqueJp1, edificio1, edificio2, edificio3, soldadoJp2, soldado2Jp2, healerJp2, avionJp2, tanqueJp2, demoledor] 
+
 	//const property jugador1 = new Jugador(personajes = [soldadoNaziJp1]) 
     //const property jugador2 = new Jugador(personajes = [soldadoNaziJp2])
 		
@@ -37,25 +41,13 @@ object configuracion{
 		teclado.teclasTurno()
 		tablero.configurarCasillas()
 		
-		jugador1.agregarPersonajes([soldadoJp1, healerJp1, avionJp1, tanqueJp1])
-		jugador2.agregarPersonajes([soldadoJp2, healerJp2, avionJp2, tanqueJp2])
+		jugador1.agregarPersonajes([soldadoJp1, soldado2Jp1, healerJp1, avionJp1, tanqueJp1])
+		jugador2.agregarPersonajes([soldadoJp2, soldado2Jp2, healerJp2, avionJp2, tanqueJp2, demoledor])
 		jugador1.agregarEdificios([edificio1,edificio2,edificio3])
 		jugador1.oponente(jugador2)
 		jugador2.oponente(jugador1)
 		
-		game.addVisual(soldadoJp1)
-		game.addVisual(healerJp1)
-		game.addVisual(avionJp1)
-		game.addVisual(tanqueJp1)
-		
-		game.addVisual(edificio1)
-		game.addVisual(edificio2)
-		game.addVisual(edificio3)
-		
-		game.addVisual(healerJp2)
-		game.addVisual(tanqueJp2)
-		game.addVisual(soldadoJp2)
-		game.addVisual(avionJp2)
+		unidades.forEach({unidad => game.addVisual(unidad)})
 		
 		game.addVisual(marcadorMovimientos)
 		game.addVisual(marcadorAtaques)

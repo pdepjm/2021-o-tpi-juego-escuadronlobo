@@ -11,7 +11,7 @@ class Jugador {
 	var property oponente = null
 	
 	
-	method rangoDeDespliegueDeUnidades()
+	method rangoDeDespliegueDeUnidades() = rangoIlimitado
 	method seleccionarParaMover(){
 		const personaje = cursor.personajeApuntado()
 		if(self.esDeJugador(personaje)){
@@ -32,7 +32,7 @@ class Jugador {
 			}
 		}
 		else{
-			game.say(cursor.personajeApuntado(), "No tengo ataque" + n.toString())
+			game.say(cursor.personajeApuntado(), "No tengo ataque " + n.toString())
 		}
 	}
 	
@@ -73,6 +73,7 @@ object jugador1 inherits Jugador {
 	method siguiente() = jugador2
 	override method perdio() = super() or edificios.isEmpty()
 	method cursorJugador() = "cursor.png"
+
 	override method rangoDeDespliegueDeUnidades() = new RangoColumnas(columnas = [1,2])
 	
 	method destruirEdificio(edificio){
@@ -98,4 +99,5 @@ object jugador2 inherits Jugador {
 	method siguiente() = jugador1
 	method cursorJugador() = "cursor2.png"
 	override method rangoDeDespliegueDeUnidades() = new RangoColumnas(columnas = [7,8])		
+
 }

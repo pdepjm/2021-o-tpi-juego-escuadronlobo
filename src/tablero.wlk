@@ -139,6 +139,13 @@ class Casillero{
 		else return false
 	}
 	
+	method tieneUnEdificio(){
+		if (not self.estaOcupado()){
+			return false
+		}
+		else (return self.ocupante().esEdificio())
+	}
+	
 	method mismaFila(otraCasilla) = self.coordenadas().y() == otraCasilla.coordenadas().y()
 	method mismaColumna(otraCasilla) = self.coordenadas().x() == otraCasilla.coordenadas().x()
 	method estaEntreDosEnLaMismaColumna(casilla, otraCasilla) = self.mismaColumna(casilla) and self.mismaColumna(otraCasilla) and self.coordenadas().coordYEntre(casilla.coordenadas(), otraCasilla.coordenadas())
