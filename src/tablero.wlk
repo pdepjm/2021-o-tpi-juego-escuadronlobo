@@ -142,8 +142,9 @@ class Casillero{
 	method tieneUnEdificio(){
 		if (not self.estaOcupado()){
 			return false
+		} else {
+			return self.ocupante().esEdificio()
 		}
-		else (return self.ocupante().esEdificio())
 	}
 	
 	method mismaFila(otraCasilla) = self.coordenadas().y() == otraCasilla.coordenadas().y()
