@@ -15,6 +15,9 @@
 
 ![image](https://user-images.githubusercontent.com/82128316/139786466-a5d5d344-b486-4eb0-bda0-90fd2d6b864f.png)
 
+## Trailer
+
+https://drive.google.com/drive/folders/17QVcElYbTS4NzAOGQDbPEV-Z4brNaSgo
 
 ## Reglas de Juego / Instrucciones
 
