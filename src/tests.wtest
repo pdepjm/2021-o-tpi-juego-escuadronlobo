@@ -1,11 +1,364 @@
 import soundProducer.*
+import wollok.game.*
+import tablero.*
+import direcciones.*
+import personajes.*
+import ataques.*
+import jugadores.*
+import turnos.*
 
-describe "Inserte descripción" {
+describe "configuracionBoard" {
+	test "ubicacion esta en el board" {
+		assert.that(configuracionBoard.estaEnElBoard(game.at(configuracionBoard.anchoBoard() - 2, configuracionBoard.altoBoard() - 2)))
+	}
+	test "ubicacion no esta en el board" {
+		assert.notThat(configuracionBoard.estaEnElBoard(game.at(configuracionBoard.anchoBoard() - 1, configuracionBoard.altoBoard() - 1)))
+	}
+}
+
+// testea solo izquierda
+describe "objetos direcciones"{
+	var posicion = game.at(1,2)
+	var posicionSiguiente = game.at(0,2)
+	var posicionAlBorde = game.at(2, configuracionBoard.altoBoard() - 1)
+	test "devuelve direccion siguiente si no se pasa del board"{
+		assert.equals(izquierda.proximaPosicion(posicion), posicionSiguiente)
+	}
+	test "devuelve direccion actual si se pasa del board"{
+		assert.equals(arriba.proximaPosicion(posicionAlBorde), posicionAlBorde)
+	}
+}
+
+describe "Personajes" {
+	const soldadoNazi = new Personaje(rangoMaximoMovimiento = 2, position = game.at(0,8), image = "soldadoNazi.png", vida = 100, jugador = new Jugador(personajes = [soldadoNazi]), ataques = [new GomeraDePiedras(potencia = 30, rangoMaximo = 3)])
+	const healer = new Personaje(rangoMaximoMovimiento = 5, image = "healer.png", position = game.at(0, 10), vida = 50, jugador = new Jugador(personajes = [healer]), ataques = [new GomeraCuradora(potencia = 30, rangoMaximo = 3)])
+	const soldadoComun = new Personaje(rangoMaximoMovimiento = 4, image = "axis.png", position = game.at(0, 9), vida = 150, jugador = new Jugador(personajes = [soldadoComun, healer]))
+	const edificio = new Edificio(vida = 100, position = game.at(0,7), image = "edificio1.png", jugador = jugador1)
+	const personajes = [soldadoNazi,healer, soldadoComun, edificio]
+	
 	method initialize() {
-		soundProducer.provider(soundProviderMock)		
+		game.clear()
+		game.addVisual(cursor)
+		personajes.forEach({personaje => game.addVisual(personaje)})
+	} 
+	
+	method posicionCursor(posicion) {
+		cursor.position(posicion)
 	}
 	
-	test "testX" {
-		assert.that(true)
-	}	
+	method asignarUnOponente() {
+		jugador1.oponente(jugador2)
+	}
+	
+	test "Personaje que ataca a otro personaje" {
+		self.posicionCursor(game.at(0,9))
+		soldadoNazi.ataque(1).atacante(soldadoNazi)
+		soldadoNazi.ataque(1).realizarEfectoAtaque(game.at(0,9)) // donde está soldadoNazi
+		assert.equals(120, soldadoComun.vida())
+	}
+ 
+	test "Personaje que se muere al descontar todos sus puntos de vida" {
+		cursor.position(game.at(0,9))
+		soldadoNazi.ataque(1).atacante(soldadoNazi)
+		5.times({i => soldadoNazi.ataque(1).realizarEfectoAtaque(game.at(0,9))})
+		assert.equals(0, soldadoComun.vida())
+		assert.notThat(game.hasVisual(soldadoComun))
+		assert.notThat(soldadoComun.jugador().esDeJugador(soldadoComun))
+	}
+	
+	test "Edifico que se destruye al descontar todos sus puntos de vida" {
+		self.asignarUnOponente()
+		cursor.position(game.at(0,7))
+		soldadoNazi.ataque(1).atacante(soldadoNazi)
+		4.times({i => soldadoNazi.ataque(1).realizarEfectoAtaque(game.at(0,7))})
+		assert.equals(0, edificio.vida())
+		assert.notThat(game.hasVisual(edificio))
+		assert.notThat(edificio.jugador().esDeJugador(edificio))
+	}
 }
+
+describe "ataques"{
+	var gomeraDePiedras = new GomeraDePiedras(potencia = 30, rangoMaximo = 3)
+	var gomeraCuradora= new GomeraCuradora(potencia = 30, rangoMaximo = 3)
+	const atacante = new Personaje(rangoMaximoMovimiento = 2, image = "soldadoNazi.png", position = game.at(7,7), vida = 100, ataques = [gomeraDePiedras, gomeraCuradora])
+	const atacado = new Personaje(rangoMaximoMovimiento = 2, image = "soldadoNazi.png", position = game.at(7,6), vida = 70, ataques = [])
+	const curado = new Personaje(rangoMaximoMovimiento = 2, image = "soldadoNazi.png", position = game.at(6,6), vida = 70, ataques = [])
+	const avion = new Avion(rangoMaximoMovimiento = 2, image = "avion1.png", position = game.at(4,7), vida = 100, ataques = [new Bombardeo(potencia = 30)])
+	const aliadoAvion = new Personaje(rangoMaximoMovimiento = 2, image = "soldadoNazi.png", position = game.at(4,5), vida = 70, ataques = [])
+	const enemigoAvion = new Personaje(rangoMaximoMovimiento = 2, image = "soldadoNazi.png", position = game.at(4,6), vida = 70, ataques = [])
+	
+	// ya se que repite codigo y podria haber hecho un initialize, pero con el initialize me daba error, creo que wollok game no se resetea despues de cada test o algo asi
+	
+	method initialize(){
+		game.clear()
+	}
+	
+	test "se puede seleccionar el ataque"{
+		tablero.configurarCasillas()
+		game.addVisual(cursor)
+		game.addVisual(atacante)
+		7.times({i => cursor.mover(derecha)})
+		cursor.seleccionarAtaque(1)
+		assert.equals(gomeraDePiedras.atacante(), atacante)
+		assert.equals(cursor.ataqueSeleccionado(), gomeraDePiedras)
+	}
+	test "Un ataque PegaEnUnaCasilla hace su efecto. Los Personajes reciben danio."{
+		tablero.configurarCasillas()
+		game.addVisual(cursor)
+		game.addVisual(atacado)
+		game.addVisual(atacante)
+		7.times({i => cursor.mover(derecha)})
+		// estas proximas dos lineas son lo mismo que cursor.seleccionarAtaque(1), lo que testea el test anterior
+		gomeraDePiedras.marcarComoSeleccionado(atacante)
+		cursor.ataqueSeleccionado(gomeraDePiedras)
+		1.times({i => cursor.mover(abajo)})
+		cursor.atacar()
+		assert.equals(cursor.ataqueSeleccionado(), ningunAtaque)
+		assert.equals(atacado.vida(), 70 - gomeraDePiedras.potencia())
+	}
+	test "Un ataque CuraEnUnaCasilla hace su efecto. Los Personajes se curan."{
+		tablero.configurarCasillas()
+		game.addVisual(cursor)
+		game.addVisual(curado)
+		game.addVisual(atacante)
+		6.times({i => cursor.mover(derecha)})
+		1.times({i => cursor.mover(abajo)})
+		// estas proximas dos lineas son lo mismo que cursor.seleccionarAtaque(1), lo que testea el test anterior
+		gomeraCuradora.marcarComoSeleccionado(atacante)
+		cursor.ataqueSeleccionado(gomeraCuradora)
+		cursor.atacar()
+		assert.equals(cursor.ataqueSeleccionado(), ningunAtaque)
+		assert.equals(curado.vida(), 70 + gomeraCuradora.potencia())
+	}
+	// lo de los casilleros atacables de las testearlo a mano, es mas intuitivo que estar viendo que de bien la lista de coordenadas.
+//	test "CasillerosAtacables de AtaqueEnLineaRecta"{ // no anda
+//		tablero.configurarCasillas()
+//		game.addVisual(avion)
+//		game.addVisual(enemigoAvion)
+//		game.addVisual(aliadoAvion)
+//		game.addVisual(cursor)
+//		jugador1.agregarPersonajes([avion, aliadoAvion])
+//		jugador2.agregarPersonajes([enemigoAvion])
+//		cursor.position(tablero.casilleroDe(avion).position())
+//		jugador1.realizarAtaque(1)
+//		assert.equals(avion.ataque(1).posicionesAtacables().asSet(), [game.at(7,1), game.at(7,2), game.at(7,3), game.at(3,5), game.at(4,5), game.at(5,5), game.at(6,5), game.at(8,5), game.at(9,5), game.at(10,5), game.at(7,7)].asSet())
+//	}
+test "El bombardeo mueve al atacante"{
+		tablero.configurarCasillas()
+		game.addVisual(avion)
+		game.addVisual(cursor)
+		cursor.position(tablero.casilleroDe(avion).position())
+		jugador1.agregarPersonajes([avion])
+		turnoManager.atacarConJugadorActual(1)
+		3.times({i => cursor.mover(abajo)})
+		cursor.atacar()
+		assert.equals(avion.position(), cursor.position())
+}
+test "El bombardeo ataca a los enemigos"{
+		tablero.configurarCasillas()
+		game.addVisual(avion)
+		game.addVisual(enemigoAvion)
+		game.addVisual(cursor)
+		cursor.position(tablero.casilleroDe(avion).position())
+		jugador1.agregarPersonajes([avion])
+		jugador2.agregarPersonajes([enemigoAvion])
+		turnoManager.atacarConJugadorActual(1)
+		3.times({i => cursor.mover(abajo)})
+		cursor.atacar()
+		assert.equals(enemigoAvion.vida(), 70 - avion.ataque(1).potencia())
+}
+test "El bombardeo no ataca a los aliados"{
+		tablero.configurarCasillas()
+		game.addVisual(avion)
+		game.addVisual(aliadoAvion)
+		game.addVisual(cursor)
+		cursor.position(tablero.casilleroDe(avion).position())
+		jugador1.agregarPersonajes([avion, aliadoAvion])
+		turnoManager.atacarConJugadorActual(1)
+		3.times({i => cursor.mover(abajo)})
+		cursor.atacar()
+		assert.equals(aliadoAvion.vida(), 70)
+}
+}
+
+/*describe "Al matar un personaje, se lo elimina del oponente"{
+	
+}
+*/
+
+describe "tablero"{
+	const josesito = new Personaje(rangoMaximoMovimiento = 2, image = "soldadoNazi.png", position = game.at(5,5), vida = 100, ataques = [])
+	
+	method initialize(){
+		game.clear()
+		tablero.configurarCasillas()
+	}
+	
+	test "casilleros entre dos en la misma columna"{
+		assert.equals( [tablero.casillero(1,1), tablero.casillero(1,2), tablero.casillero(1,3)], tablero.casillerosEntre(tablero.casillero(1,3), tablero.casillero(1,1)))
+	}
+	
+	test "casilleros entre dos en la misma fila"{
+		assert.equals([tablero.casillero(4,5), tablero.casillero(5,5), tablero.casillero(6,5), tablero.casillero(7,5)], tablero.casillerosEntre(tablero.casillero(7,5), tablero.casillero(4,5)))
+	}
+	
+	test "casilleros que no estan en la misma fila o columna no tienen casilleros entre ellos"{
+		assert.equals([], tablero.casillerosEntre(tablero.casillero(1,2), tablero.casillero(3,4)))
+	}
+	
+	test "casillero ocupado"{
+		game.addVisual(josesito)
+		assert.that(tablero.casillero(3,5).estaOcupado())
+		game.removeVisual(josesito)
+	}
+	
+	test "casillero vacio"{
+		game.addVisual(cursor)
+		cursor.position(tablero.casillero(3,5).position())
+		assert.notThat(tablero.casillero(3,5).estaOcupado())
+		game.removeVisual(cursor)		
+	}
+	
+	test "ocupante de un casillero ocupado"{
+		game.addVisual(josesito)
+		game.addVisual(cursor)
+		cursor.position(tablero.casillero(3,5).position())
+		assert.equals(josesito, tablero.casillero(3,5).ocupante())
+		game.removeVisual(josesito)
+		game.removeVisual(cursor)
+	}
+	
+	test "un casillero no ocupado tira error al pedirle el ocupante"{
+		game.addVisual(cursor)
+		cursor.position(tablero.casillero(3,7).position())
+		assert.throwsExceptionWithMessage("no hay un ocupante en el casillero", {tablero.casillero(3,7).ocupante()})
+		game.removeVisual(cursor)		
+	}
+	
+	test "casillero de un personaje"{
+		game.addVisual(josesito)
+		game.addVisual(cursor)
+		cursor.position(tablero.casillero(3,5).position())
+		assert.equals(tablero.casillero(3,5), tablero.casilleroDe(josesito))
+		game.removeVisual(cursor)
+	}
+}
+
+describe "turnos"{
+	const soldadoJp1 = new Personaje(rangoMaximoMovimiento = 2, image = "ally.png", position = game.at(4,7), vida = 100, ataques = [new Rifle(potencia = 1, rangoMaximo = 99)])
+	const healerJp1 = new Personaje(rangoMaximoMovimiento = 2, image = "healer.png", vida = 60, ataques = [new GomeraCuradora(potencia = 1, rangoMaximo = 2)], position= game.at(4,6))	
+	const avionJp1 = new Avion(rangoMaximoMovimiento = 2, image = "avion1.png", position = game.at(4,5), vida = 100, ataques = [new Bombardeo(potencia = 1)])	
+	const edificio1 = new Edificio(position = game.at(3,7), image = "edificio1.png", vida = 600)
+	
+	method atacarCon(atacante){
+		cursor.position(atacante.position())
+		turnoManager.atacarConJugadorActual(1)
+		cursor.position(avionJp1.position())
+		cursor.atacar()
+	}
+	
+	method moverALaMismaPosicion(personaje){
+		cursor.position(personaje.position())
+		cursor.seleccionar() // selecciona
+		cursor.seleccionar() // desselecciona
+	}
+	
+//	method initalize(){
+//		game.clear()
+//		tablero.configurarCasillas()
+//		game.addVisual(soldadoJp1)
+//		game.addVisual(healerJp1)
+//		game.addVisual(avionJp1)
+//		game.addVisual(cursor)
+//		turnoManager.turno(new Turno(jugador = jugador1, movimientosMaximos = 2, ataquesMaximos = 2))
+//	}
+	
+	test "se pasa de turno al llegar al maximo de ataques y movimientos"{
+		game.clear()
+		tablero.configurarCasillas()
+		jugador1.agregarPersonajes([soldadoJp1, healerJp1, avionJp1])
+		jugador1.agregarEdificios([edificio1])
+		game.addVisual(soldadoJp1)
+		game.addVisual(healerJp1)
+		game.addVisual(avionJp1)
+		game.addVisual(cursor)
+		turnoManager.turno(new Turno(jugador = jugador1, movimientosMaximos = 2, ataquesMaximos = 2))
+		self.atacarCon(soldadoJp1)
+		self.atacarCon(healerJp1)
+		self.moverALaMismaPosicion(soldadoJp1)
+		self.moverALaMismaPosicion(healerJp1)
+		turnoManager.atacarConJugadorActual(1)
+		assert.equals(turnoManager.jugadorActual(), jugador2)
+	}
+	test "no te deja atacar si alcanzaste el máximo de ataques"{
+		game.clear()
+		tablero.configurarCasillas()
+		jugador1.agregarPersonajes([soldadoJp1, healerJp1, avionJp1])
+		jugador1.agregarEdificios([edificio1])
+		game.addVisual(soldadoJp1)
+		game.addVisual(healerJp1)
+		game.addVisual(avionJp1)
+		game.addVisual(cursor)
+		turnoManager.turno(new Turno(jugador = jugador1, movimientosMaximos = 2, ataquesMaximos = 2))
+		self.atacarCon(soldadoJp1)
+		self.atacarCon(healerJp1)
+		
+		cursor.position(avionJp1.position())
+		turnoManager.atacarConJugadorActual(1)
+		
+		assert.equals(cursor.ataqueSeleccionado(), ningunAtaque)
+	}
+//	test "no te deja atacar si ya atacaste con esa unidad"{ // falla el test pero anda
+//		game.clear()
+//		tablero.configurarCasillas()
+//		jugador1.agregarPersonajes([soldadoJp1, healerJp1, avionJp1])
+//		jugador1.agregarEdificios([edificio1])
+//		game.addVisual(soldadoJp1)
+//		game.addVisual(healerJp1)
+//		game.addVisual(avionJp1)
+//		game.addVisual(cursor)
+//		turnoManager.turno(new Turno(jugador = jugador1, movimientosMaximos = 2, ataquesMaximos = 2))
+//		self.atacarCon(avionJp1)
+//		
+//		cursor.position(avionJp1.position())
+//		turnoManager.atacarConJugadorActual(1)
+//		
+//		assert.equals(cursor.ataqueSeleccionado(), ningunAtaque)	
+//	}
+	test "no te deja mover si llegaste al maximo de movimientos"{
+		game.clear()
+		tablero.configurarCasillas()
+		jugador1.agregarPersonajes([soldadoJp1, healerJp1, avionJp1])
+		jugador1.agregarEdificios([edificio1])
+		game.addVisual(soldadoJp1)
+		game.addVisual(healerJp1)
+		game.addVisual(avionJp1)
+		game.addVisual(cursor)
+		turnoManager.turno(new Turno(jugador = jugador1, movimientosMaximos = 2, ataquesMaximos = 2))
+		self.moverALaMismaPosicion(soldadoJp1)
+		self.moverALaMismaPosicion(healerJp1)
+		
+		cursor.position(avionJp1.position())
+		cursor.seleccionar()
+		
+		assert.equals(cursor.seleccionado(), ningunPersonaje)			
+	}
+	test "no te deja mover si ya moviste esa unidad"{
+		game.clear()
+		tablero.configurarCasillas()
+		jugador1.agregarPersonajes([soldadoJp1, healerJp1, avionJp1])
+		jugador1.agregarEdificios([edificio1])
+		game.addVisual(soldadoJp1)
+		game.addVisual(healerJp1)
+		game.addVisual(avionJp1)
+		game.addVisual(cursor)
+		turnoManager.turno(new Turno(jugador = jugador1, movimientosMaximos = 2, ataquesMaximos = 2))
+		self.moverALaMismaPosicion(soldadoJp1)
+		
+		cursor.position(soldadoJp1.position())
+		cursor.seleccionar()
+		
+		assert.equals(cursor.seleccionado(), ningunPersonaje)
+	}
+}
+

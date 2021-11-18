@@ -1,10 +1,19 @@
 import wollok.game.*
-import pepita.*
+import tablero.*
 import texto.*
+import nivel.*
+import teclado.*
 
 program juego {
-	game.title("Juego Base")
-	game.addVisual(pepita)
-	game.addVisual(texto)
+	configuracionBoard.configurarBoard()
+	
+	game.title("TABLE WAR")
+	game.boardGround("tablero.png")		
+	
+	menuPrincipal.mostrar()
+	menuPrincipal.animacion()
+	menuPrincipal.iniciar()	
+	
 	game.start()
 }
+

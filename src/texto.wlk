@@ -1,4 +1,5 @@
 import wollok.game.*
+import turnos.*
 
 // ¡Los visuales también pueden ser texto!
 // Hay que definir la posición en la que debe aparecer
@@ -24,4 +25,21 @@ object texto {
 object paleta {
 	method verde() = "00FF00FF"
 	method rojo() = "FF0000FF"
+}
+
+object imagenesNumeros{
+	const numeros = ["numero0.png", "numero1.png", "numero2.png", "numero3.png", "numero4.png", "numero5.png", "numero6.png", "numero7.png"]
+	method numero(n) = numeros.get(n)
+}
+
+
+object marcadorMovimientos{
+	method position() = game.at(5, 8)
+	method image() = imagenesNumeros.numero(turnoManager.movidasRestantes())
+}
+
+object marcadorAtaques {
+	method position() = game.at(10, 8)
+	method image() = imagenesNumeros.numero(turnoManager.ataquesRestantes())
+	
 }
